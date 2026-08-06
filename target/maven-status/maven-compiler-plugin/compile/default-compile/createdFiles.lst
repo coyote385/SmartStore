@@ -1,7 +1,9 @@
 com\smartstore\model\Categoria.class
+com\smartstore\model\Pedido.class
 com\smartstore\model\Producto.class
 com\smartstore\model\Proveedor.class
 com\smartstore\ui\MainFrame.class
 com\smartstore\Main.class
+com\smartstore\model\DetallePedido.class
 com\smartstore\model\Cliente.class
 com\smartstore\service\InventarioService.class
