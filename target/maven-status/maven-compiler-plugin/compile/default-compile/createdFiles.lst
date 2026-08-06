@@ -7,3 +7,4 @@ com\smartstore\Main.class
 com\smartstore\model\DetallePedido.class
 com\smartstore\model\Cliente.class
 com\smartstore\service\InventarioService.class
+com\smartstore\model\Factura.class

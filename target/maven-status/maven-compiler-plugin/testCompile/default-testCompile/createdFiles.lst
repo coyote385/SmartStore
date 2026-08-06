@@ -1,5 +1,6 @@
 com\smartstore\model\ClienteTest.class
 com\smartstore\service\InventarioServiceTest.class
+com\smartstore\model\FacturaTest.class
 com\smartstore\model\DetallePedidoTest.class
 com\smartstore\model\PedidoTest.class
 com\smartstore\model\ProductoTest.class
