@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Producto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.model</a> &gt; <span class="el_source">Producto.java</span></div><h1>Producto.java</h1><pre class="source lang-java linenums">package com.smartstore.model;
+
+import java.util.Objects;
+
+/**
+ * Representa un producto disponible en el inventario de SmartStore.
+ *
+ * Cada producto pertenece a una categoría y es suministrado por un proveedor.
+ *
+ * @author Jonathan Mendez
+ * @version 1.0
+ */
+public class Producto {
+
+    private String codigo;
+    private String nombre;
+    private String descripcion;
+
+    private double precio;
+
+    private int stock;
+    private int stockMinimo;
+
+    private Categoria categoria;
+    private Proveedor proveedor;
+
+    /**
+     * Constructor completo.
+     */
+    public Producto(String codigo,
+                    String nombre,
+                    String descripcion,
+                    double precio,
+                    int stock,
+                    int stockMinimo,
+                    Categoria categoria,
+<span class="fc" id="L37">                    Proveedor proveedor) {</span>
+
+<span class="fc" id="L39">        setCodigo(codigo);</span>
+<span class="fc" id="L40">        setNombre(nombre);</span>
+<span class="fc" id="L41">        setDescripcion(descripcion);</span>
+<span class="fc" id="L42">        setPrecio(precio);</span>
+<span class="fc" id="L43">        setStock(stock);</span>
+<span class="fc" id="L44">        setStockMinimo(stockMinimo);</span>
+
+<span class="pc bpc" id="L46" title="1 of 2 branches missed.">        if (categoria == null) {</span>
+<span class="nc" id="L47">            throw new IllegalArgumentException(&quot;La categoría es obligatoria.&quot;);</span>
+        }
+
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (proveedor == null) {</span>
+<span class="nc" id="L51">            throw new IllegalArgumentException(&quot;El proveedor es obligatorio.&quot;);</span>
+        }
+
+<span class="fc" id="L54">        this.categoria = categoria;</span>
+<span class="fc" id="L55">        this.proveedor = proveedor;</span>
+<span class="fc" id="L56">    }</span>
+
+    //=========================
+    // Getters y Setters
+    //=========================
+
+    public String getCodigo() {
+<span class="fc" id="L63">        return codigo;</span>
+    }
+
+    public void setCodigo(String codigo) {
+
+<span class="pc bpc" id="L68" title="2 of 4 branches missed.">        if (codigo == null || codigo.trim().isEmpty()) {</span>
+<span class="nc" id="L69">            throw new IllegalArgumentException(&quot;El código es obligatorio.&quot;);</span>
+        }
+
+<span class="fc" id="L72">        this.codigo = codigo;</span>
+<span class="fc" id="L73">    }</span>
+
+    public String getNombre() {
+<span class="fc" id="L76">        return nombre;</span>
+    }
+
+    public void setNombre(String nombre) {
+
+<span class="pc bpc" id="L81" title="2 of 4 branches missed.">        if (nombre == null || nombre.trim().isEmpty()) {</span>
+<span class="nc" id="L82">            throw new IllegalArgumentException(&quot;El nombre es obligatorio.&quot;);</span>
+        }
+
+<span class="fc" id="L85">        this.nombre = nombre;</span>
+<span class="fc" id="L86">    }</span>
+
+    public String getDescripcion() {
+<span class="nc" id="L89">        return descripcion;</span>
+    }
+
+    public void setDescripcion(String descripcion) {
+
+<span class="pc bpc" id="L94" title="2 of 4 branches missed.">        if (descripcion == null || descripcion.trim().isEmpty()) {</span>
+<span class="nc" id="L95">            throw new IllegalArgumentException(&quot;La descripción es obligatoria.&quot;);</span>
+        }
+
+<span class="fc" id="L98">        this.descripcion = descripcion;</span>
+<span class="fc" id="L99">    }</span>
+
+    public double getPrecio() {
+<span class="nc" id="L102">        return precio;</span>
+    }
+
+    public void setPrecio(double precio) {
+
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">        if (precio &lt;= 0) {</span>
+<span class="nc" id="L108">            throw new IllegalArgumentException(&quot;El precio debe ser mayor que cero.&quot;);</span>
+        }
+
+<span class="fc" id="L111">        this.precio = precio;</span>
+<span class="fc" id="L112">    }</span>
+
+    public int getStock() {
+<span class="fc" id="L115">        return stock;</span>
+    }
+
+    public void setStock(int stock) {
+
+<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        if (stock &lt; 0) {</span>
+<span class="nc" id="L121">            throw new IllegalArgumentException(&quot;El stock no puede ser negativo.&quot;);</span>
+        }
+
+<span class="fc" id="L124">        this.stock = stock;</span>
+<span class="fc" id="L125">    }</span>
+
+    public int getStockMinimo() {
+<span class="nc" id="L128">        return stockMinimo;</span>
+    }
+
+    public void setStockMinimo(int stockMinimo) {
+
+<span class="pc bpc" id="L133" title="1 of 2 branches missed.">        if (stockMinimo &lt; 0) {</span>
+<span class="nc" id="L134">            throw new IllegalArgumentException(&quot;El stock mínimo no puede ser negativo.&quot;);</span>
+        }
+
+<span class="fc" id="L137">        this.stockMinimo = stockMinimo;</span>
+<span class="fc" id="L138">    }</span>
+
+    public Categoria getCategoria() {
+<span class="nc" id="L141">        return categoria;</span>
+    }
+
+    public void setCategoria(Categoria categoria) {
+
+<span class="nc bnc" id="L146" title="All 2 branches missed.">        if (categoria == null) {</span>
+<span class="nc" id="L147">            throw new IllegalArgumentException(&quot;La categoría es obligatoria.&quot;);</span>
+        }
+
+<span class="nc" id="L150">        this.categoria = categoria;</span>
+<span class="nc" id="L151">    }</span>
+
+    public Proveedor getProveedor() {
+<span class="nc" id="L154">        return proveedor;</span>
+    }
+
+    public void setProveedor(Proveedor proveedor) {
+
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if (proveedor == null) {</span>
+<span class="nc" id="L160">            throw new IllegalArgumentException(&quot;El proveedor es obligatorio.&quot;);</span>
+        }
+
+<span class="nc" id="L163">        this.proveedor = proveedor;</span>
+<span class="nc" id="L164">    }</span>
+
+    //=========================
+    // Métodos de negocio
+    //=========================
+
+    /**
+     * Incrementa el stock.
+     */
+    public void aumentarStock(int cantidad) {
+
+<span class="pc bpc" id="L175" title="1 of 2 branches missed.">        if (cantidad &lt;= 0) {</span>
+<span class="nc" id="L176">            throw new IllegalArgumentException(&quot;La cantidad debe ser mayor que cero.&quot;);</span>
+        }
+
+<span class="fc" id="L179">        stock += cantidad;</span>
+<span class="fc" id="L180">    }</span>
+
+    /**
+     * Disminuye el stock.
+     */
+    public void disminuirStock(int cantidad) {
+
+<span class="pc bpc" id="L187" title="1 of 2 branches missed.">        if (cantidad &lt;= 0) {</span>
+<span class="nc" id="L188">            throw new IllegalArgumentException(&quot;La cantidad debe ser mayor que cero.&quot;);</span>
+        }
+
+<span class="fc bfc" id="L191" title="All 2 branches covered.">        if (cantidad &gt; stock) {</span>
+<span class="fc" id="L192">            throw new IllegalArgumentException(&quot;Stock insuficiente.&quot;);</span>
+        }
+
+<span class="fc" id="L195">        stock -= cantidad;</span>
+<span class="fc" id="L196">    }</span>
+
+    /**
+     * Indica si existe inventario disponible.
+     */
+    public boolean hayStock() {
+<span class="pc bpc" id="L202" title="1 of 2 branches missed.">        return stock &gt; 0;</span>
+    }
+
+    /**
+     * Indica si el inventario llegó al mínimo permitido.
+     */
+    public boolean stockBajo() {
+<span class="pc bpc" id="L209" title="1 of 2 branches missed.">        return stock &lt;= stockMinimo;</span>
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (this == obj)</span>
+<span class="fc" id="L216">            return true;</span>
+
+<span class="pc bpc" id="L218" title="1 of 2 branches missed.">        if (!(obj instanceof Producto))</span>
+<span class="nc" id="L219">            return false;</span>
+
+<span class="fc" id="L221">        Producto other = (Producto) obj;</span>
+
+<span class="fc" id="L223">        return Objects.equals(codigo, other.codigo);</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="fc" id="L228">        return Objects.hash(codigo);</span>
+    }
+
+    @Override
+    public String toString() {
+
+<span class="fc" id="L234">        return &quot;Producto{&quot; +</span>
+                &quot;codigo='&quot; + codigo + '\'' +
+                &quot;, nombre='&quot; + nombre + '\'' +
+                &quot;, precio=&quot; + precio +
+                &quot;, stock=&quot; + stock +
+<span class="fc" id="L239">                &quot;, categoria=&quot; + categoria.getNombre() +</span>
+<span class="fc" id="L240">                &quot;, proveedor=&quot; + proveedor.getNombre() +</span>
+                '}';
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

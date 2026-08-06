@@ -1,0 +1,5 @@
+com\smartstore\model\ClienteTest.class
+com\smartstore\service\InventarioServiceTest.class
+com\smartstore\model\CategoriaTest.class
+com\smartstore\model\ProductoTest.class
+com\smartstore\model\ProveedorTest.class
