@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GrafoLogistico.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.structures</a> &gt; <span class="el_source">GrafoLogistico.java</span></div><h1>GrafoLogistico.java</h1><pre class="source lang-java linenums">package com.smartstore.structures;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Representa un grafo para modelar las conexiones
@@ -19,9 +22,9 @@ public class GrafoLogistico {
     /**
      * Constructor del grafo.
      */
-<span class="fc" id="L22">    public GrafoLogistico() {</span>
-<span class="fc" id="L23">        conexiones = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L24">    }</span>
+<span class="fc" id="L25">    public GrafoLogistico() {</span>
+<span class="fc" id="L26">        conexiones = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L27">    }</span>
 
     /**
      * Agrega un punto al grafo.
@@ -30,13 +33,13 @@ public class GrafoLogistico {
      */
     public void agregarPunto(String punto) {
 
-<span class="fc" id="L33">        validarPunto(punto);</span>
+<span class="fc" id="L36">        validarPunto(punto);</span>
 
-<span class="fc" id="L35">        conexiones.putIfAbsent(</span>
+<span class="fc" id="L38">        conexiones.putIfAbsent(</span>
                 punto,
                 new ArrayList&lt;&gt;()
         );
-<span class="fc" id="L39">    }</span>
+<span class="fc" id="L42">    }</span>
 
     /**
      * Agrega una conexión entre dos puntos.
@@ -50,20 +53,26 @@ public class GrafoLogistico {
             String origen,
             String destino) {
 
-<span class="fc" id="L53">        validarPunto(origen);</span>
-<span class="fc" id="L54">        validarPunto(destino);</span>
+<span class="fc" id="L56">        validarPunto(origen);</span>
+<span class="fc" id="L57">        validarPunto(destino);</span>
 
-<span class="fc" id="L56">        agregarPunto(origen);</span>
-<span class="fc" id="L57">        agregarPunto(destino);</span>
+<span class="fc" id="L59">        agregarPunto(origen);</span>
+<span class="fc" id="L60">        agregarPunto(destino);</span>
 
-<span class="pc bpc" id="L59" title="1 of 2 branches missed.">        if (!conexiones.get(origen).contains(destino)) {</span>
-<span class="fc" id="L60">            conexiones.get(origen).add(destino);</span>
+<span class="fc" id="L62">        if (!conexiones.get(origen)</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">                .contains(destino)) {</span>
+
+<span class="fc" id="L65">            conexiones.get(origen)</span>
+<span class="fc" id="L66">                    .add(destino);</span>
         }
 
-<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (!conexiones.get(destino).contains(origen)) {</span>
-<span class="fc" id="L64">            conexiones.get(destino).add(origen);</span>
+<span class="fc" id="L69">        if (!conexiones.get(destino)</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                .contains(origen)) {</span>
+
+<span class="fc" id="L72">            conexiones.get(destino)</span>
+<span class="fc" id="L73">                    .add(origen);</span>
         }
-<span class="fc" id="L66">    }</span>
+<span class="fc" id="L75">    }</span>
 
     /**
      * Obtiene los puntos conectados a un punto determinado.
@@ -73,113 +82,16 @@ public class GrafoLogistico {
      */
     public List&lt;String&gt; obtenerVecinos(String punto) {
 
-<span class="fc" id="L76">        validarPunto(punto);</span>
+<span class="fc" id="L85">        validarPunto(punto);</span>
 
-<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (!conexiones.containsKey(punto)) {</span>
-<span class="nc" id="L79">            return new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (!conexiones.containsKey(punto)) {</span>
+<span class="nc" id="L88">            return new ArrayList&lt;&gt;();</span>
         }
 
-<span class="fc" id="L82">        return new ArrayList&lt;&gt;(</span>
-<span class="fc" id="L83">                conexiones.get(punto)</span>
+<span class="fc" id="L91">        return new ArrayList&lt;&gt;(</span>
+<span class="fc" id="L92">                conexiones.get(punto)</span>
         );
     }
-
-    /**
-     * Recorre el grafo utilizando BFS.
-     *
-     * @param inicio Punto inicial.
-     * @return Lista de puntos visitados.
-     */
-    public List&lt;String&gt; bfs(String inicio) {
-
-<span class="fc" id="L95">        validarPunto(inicio);</span>
-
-<span class="fc" id="L97">        List&lt;String&gt; recorrido =</span>
-                new ArrayList&lt;&gt;();
-
-<span class="fc bfc" id="L100" title="All 2 branches covered.">        if (!conexiones.containsKey(inicio)) {</span>
-<span class="fc" id="L101">            return recorrido;</span>
-        }
-
-<span class="fc" id="L104">        Queue&lt;String&gt; cola =</span>
-                new LinkedList&lt;&gt;();
-
-<span class="fc" id="L107">        Set&lt;String&gt; visitados =</span>
-                new HashSet&lt;&gt;();
-
-<span class="fc" id="L110">        cola.offer(inicio);</span>
-<span class="fc" id="L111">        visitados.add(inicio);</span>
-
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        while (!cola.isEmpty()) {</span>
-
-<span class="fc" id="L115">            String actual = cola.poll();</span>
-
-<span class="fc" id="L117">            recorrido.add(actual);</span>
-
-            for (String vecino :
-<span class="fc bfc" id="L120" title="All 2 branches covered.">                    conexiones.get(actual)) {</span>
-
-<span class="fc bfc" id="L122" title="All 2 branches covered.">                if (!visitados.contains(vecino)) {</span>
-
-<span class="fc" id="L124">                    visitados.add(vecino);</span>
-<span class="fc" id="L125">                    cola.offer(vecino);</span>
-                }
-<span class="fc" id="L127">            }</span>
-<span class="fc" id="L128">        }</span>
-
-<span class="fc" id="L130">        return recorrido;</span>
-    }
-
-    /**
-     * Recorre el grafo utilizando DFS.
-     *
-     * @param inicio Punto inicial.
-     * @return Lista de puntos visitados.
-     */
-    public List&lt;String&gt; dfs(String inicio) {
-
-<span class="fc" id="L141">        validarPunto(inicio);</span>
-
-<span class="fc" id="L143">        List&lt;String&gt; recorrido =</span>
-                new ArrayList&lt;&gt;();
-
-<span class="pc bpc" id="L146" title="1 of 2 branches missed.">        if (!conexiones.containsKey(inicio)) {</span>
-<span class="nc" id="L147">            return recorrido;</span>
-        }
-
-<span class="fc" id="L150">        Set&lt;String&gt; visitados =</span>
-                new HashSet&lt;&gt;();
-
-<span class="fc" id="L153">        dfsRecursivo(</span>
-                inicio,
-                visitados,
-                recorrido
-        );
-
-<span class="fc" id="L159">        return recorrido;</span>
-    }
-
-    private void dfsRecursivo(
-            String actual,
-            Set&lt;String&gt; visitados,
-            List&lt;String&gt; recorrido) {
-
-<span class="fc" id="L167">        visitados.add(actual);</span>
-<span class="fc" id="L168">        recorrido.add(actual);</span>
-
-        for (String vecino :
-<span class="fc bfc" id="L171" title="All 2 branches covered.">                conexiones.get(actual)) {</span>
-
-<span class="fc bfc" id="L173" title="All 2 branches covered.">            if (!visitados.contains(vecino)) {</span>
-
-<span class="fc" id="L175">                dfsRecursivo(</span>
-                        vecino,
-                        visitados,
-                        recorrido
-                );
-            }
-<span class="fc" id="L181">        }</span>
-<span class="fc" id="L182">    }</span>
 
     /**
      * Verifica si existe un punto.
@@ -189,11 +101,11 @@ public class GrafoLogistico {
      */
     public boolean contienePunto(String punto) {
 
-<span class="pc bpc" id="L192" title="2 of 4 branches missed.">        if (punto == null || punto.isBlank()) {</span>
-<span class="nc" id="L193">            return false;</span>
+<span class="pc bpc" id="L104" title="2 of 4 branches missed.">        if (punto == null || punto.isBlank()) {</span>
+<span class="nc" id="L105">            return false;</span>
         }
 
-<span class="fc" id="L196">        return conexiones.containsKey(punto);</span>
+<span class="fc" id="L108">        return conexiones.containsKey(punto);</span>
     }
 
     /**
@@ -202,8 +114,7 @@ public class GrafoLogistico {
      * @return Número de puntos.
      */
     public int cantidadPuntos() {
-
-<span class="fc" id="L206">        return conexiones.size();</span>
+<span class="fc" id="L117">        return conexiones.size();</span>
     }
 
     /**
@@ -212,26 +123,24 @@ public class GrafoLogistico {
      * @return true si está vacío.
      */
     public boolean isEmpty() {
-
-<span class="fc" id="L216">        return conexiones.isEmpty();</span>
+<span class="fc" id="L126">        return conexiones.isEmpty();</span>
     }
 
     /**
      * Elimina todos los puntos y conexiones.
      */
     public void clear() {
-
-<span class="fc" id="L224">        conexiones.clear();</span>
-<span class="fc" id="L225">    }</span>
+<span class="fc" id="L133">        conexiones.clear();</span>
+<span class="fc" id="L134">    }</span>
 
     private void validarPunto(String punto) {
 
-<span class="fc bfc" id="L229" title="All 4 branches covered.">        if (punto == null || punto.isBlank()) {</span>
+<span class="fc bfc" id="L138" title="All 4 branches covered.">        if (punto == null || punto.isBlank()) {</span>
 
-<span class="fc" id="L231">            throw new IllegalArgumentException(</span>
+<span class="fc" id="L140">            throw new IllegalArgumentException(</span>
                     &quot;El punto no puede ser vacío.&quot;
             );
         }
-<span class="fc" id="L235">    }</span>
+<span class="fc" id="L144">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

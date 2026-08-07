@@ -2,27 +2,59 @@ package com.smartstore.structures;
 
 import com.smartstore.model.Producto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Representa una tabla hash para almacenar productos.
  *
- * Los productos se identifican mediante su código,
- * permitiendo realizar búsquedas rápidas por clave.
+ * Utiliza encadenamiento separado para manejar colisiones.
  *
  * @author Jonathan Mendez
  * @version 1.0
  */
 public class TablaHashProductos {
 
-    private Map<String, Producto> productos;
+    private static final int CAPACIDAD = 10;
+
+    private NodoHash[] tabla;
+    private int cantidad;
+
+    /**
+     * Nodo interno utilizado para manejar las colisiones
+     * mediante encadenamiento.
+     */
+    private static class NodoHash {
+
+        private String codigo;
+        private Producto producto;
+        private NodoHash siguiente;
+
+        public NodoHash(
+                String codigo,
+                Producto producto) {
+
+            this.codigo = codigo;
+            this.producto = producto;
+        }
+    }
 
     /**
      * Constructor de la tabla hash.
      */
     public TablaHashProductos() {
-        productos = new HashMap<>();
+
+        tabla = new NodoHash[CAPACIDAD];
+        cantidad = 0;
+    }
+
+    /**
+     * Calcula la posición de una clave dentro de la tabla.
+     *
+     * @param codigo Código del producto.
+     * @return Índice correspondiente.
+     */
+    private int calcularIndice(String codigo) {
+
+        return Math.abs(codigo.hashCode())
+                % CAPACIDAD;
     }
 
     /**
@@ -38,16 +70,32 @@ public class TablaHashProductos {
             );
         }
 
-        if (productos.containsKey(producto.getCodigo())) {
-            throw new IllegalArgumentException(
-                    "Ya existe un producto con ese código."
-            );
+        String codigo = producto.getCodigo();
+
+        int indice = calcularIndice(codigo);
+
+        NodoHash actual = tabla[indice];
+
+        while (actual != null) {
+
+            if (actual.codigo.equals(codigo)) {
+
+                throw new IllegalArgumentException(
+                        "Ya existe un producto con ese código."
+                );
+            }
+
+            actual = actual.siguiente;
         }
 
-        productos.put(
-                producto.getCodigo(),
-                producto
-        );
+        NodoHash nuevo =
+                new NodoHash(codigo, producto);
+
+        nuevo.siguiente = tabla[indice];
+
+        tabla[indice] = nuevo;
+
+        cantidad++;
     }
 
     /**
@@ -58,13 +106,22 @@ public class TablaHashProductos {
      */
     public Producto buscar(String codigo) {
 
-        if (codigo == null || codigo.isBlank()) {
-            throw new IllegalArgumentException(
-                    "El código es obligatorio."
-            );
+        validarCodigo(codigo);
+
+        int indice = calcularIndice(codigo);
+
+        NodoHash actual = tabla[indice];
+
+        while (actual != null) {
+
+            if (actual.codigo.equals(codigo)) {
+                return actual.producto;
+            }
+
+            actual = actual.siguiente;
         }
 
-        return productos.get(codigo);
+        return null;
     }
 
     /**
@@ -75,13 +132,35 @@ public class TablaHashProductos {
      */
     public Producto eliminar(String codigo) {
 
-        if (codigo == null || codigo.isBlank()) {
-            throw new IllegalArgumentException(
-                    "El código es obligatorio."
-            );
+        validarCodigo(codigo);
+
+        int indice = calcularIndice(codigo);
+
+        NodoHash actual = tabla[indice];
+        NodoHash anterior = null;
+
+        while (actual != null) {
+
+            if (actual.codigo.equals(codigo)) {
+
+                if (anterior == null) {
+                    tabla[indice] =
+                            actual.siguiente;
+                } else {
+                    anterior.siguiente =
+                            actual.siguiente;
+                }
+
+                cantidad--;
+
+                return actual.producto;
+            }
+
+            anterior = actual;
+            actual = actual.siguiente;
         }
 
-        return productos.remove(codigo);
+        return null;
     }
 
     /**
@@ -96,7 +175,7 @@ public class TablaHashProductos {
             return false;
         }
 
-        return productos.containsKey(codigo);
+        return buscar(codigo) != null;
     }
 
     /**
@@ -105,8 +184,7 @@ public class TablaHashProductos {
      * @return Cantidad de productos.
      */
     public int size() {
-
-        return productos.size();
+        return cantidad;
     }
 
     /**
@@ -115,8 +193,7 @@ public class TablaHashProductos {
      * @return true si está vacía.
      */
     public boolean isEmpty() {
-
-        return productos.isEmpty();
+        return cantidad == 0;
     }
 
     /**
@@ -124,6 +201,17 @@ public class TablaHashProductos {
      */
     public void clear() {
 
-        productos.clear();
+        tabla = new NodoHash[CAPACIDAD];
+        cantidad = 0;
+    }
+
+    private void validarCodigo(String codigo) {
+
+        if (codigo == null || codigo.isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "El código es obligatorio."
+            );
+        }
     }
 }

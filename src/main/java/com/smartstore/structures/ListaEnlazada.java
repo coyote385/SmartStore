@@ -37,6 +37,7 @@ public class ListaEnlazada<T> {
 
         if (cabeza == null) {
             cabeza = nuevo;
+
         } else {
 
             Nodo<T> actual = cabeza;
@@ -132,7 +133,6 @@ public class ListaEnlazada<T> {
      * Elimina todos los elementos.
      */
     public void clear() {
-
         cabeza = null;
         tamaño = 0;
     }
@@ -140,6 +140,7 @@ public class ListaEnlazada<T> {
     private void validarIndice(int indice) {
 
         if (indice < 0 || indice >= tamaño) {
+
             throw new IndexOutOfBoundsException(
                     "Índice fuera de rango."
             );

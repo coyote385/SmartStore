@@ -37,19 +37,20 @@ public class ListaEnlazada&lt;T&gt; {
 
 <span class="fc bfc" id="L38" title="All 2 branches covered.">        if (cabeza == null) {</span>
 <span class="fc" id="L39">            cabeza = nuevo;</span>
+
         } else {
 
-<span class="fc" id="L42">            Nodo&lt;T&gt; actual = cabeza;</span>
+<span class="fc" id="L43">            Nodo&lt;T&gt; actual = cabeza;</span>
 
-<span class="fc bfc" id="L44" title="All 2 branches covered.">            while (actual.getSiguiente() != null) {</span>
-<span class="fc" id="L45">                actual = actual.getSiguiente();</span>
+<span class="fc bfc" id="L45" title="All 2 branches covered.">            while (actual.getSiguiente() != null) {</span>
+<span class="fc" id="L46">                actual = actual.getSiguiente();</span>
             }
 
-<span class="fc" id="L48">            actual.setSiguiente(nuevo);</span>
+<span class="fc" id="L49">            actual.setSiguiente(nuevo);</span>
         }
 
-<span class="fc" id="L51">        tamaño++;</span>
-<span class="fc" id="L52">    }</span>
+<span class="fc" id="L52">        tamaño++;</span>
+<span class="fc" id="L53">    }</span>
 
     /**
      * Obtiene un elemento mediante su posición.
@@ -59,15 +60,15 @@ public class ListaEnlazada&lt;T&gt; {
      */
     public T obtener(int indice) {
 
-<span class="fc" id="L62">        validarIndice(indice);</span>
+<span class="fc" id="L63">        validarIndice(indice);</span>
 
-<span class="fc" id="L64">        Nodo&lt;T&gt; actual = cabeza;</span>
+<span class="fc" id="L65">        Nodo&lt;T&gt; actual = cabeza;</span>
 
-<span class="fc bfc" id="L66" title="All 2 branches covered.">        for (int i = 0; i &lt; indice; i++) {</span>
-<span class="fc" id="L67">            actual = actual.getSiguiente();</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        for (int i = 0; i &lt; indice; i++) {</span>
+<span class="fc" id="L68">            actual = actual.getSiguiente();</span>
         }
 
-<span class="fc" id="L70">        return actual.getDato();</span>
+<span class="fc" id="L71">        return actual.getDato();</span>
     }
 
     /**
@@ -78,36 +79,36 @@ public class ListaEnlazada&lt;T&gt; {
      */
     public T eliminar(int indice) {
 
-<span class="fc" id="L81">        validarIndice(indice);</span>
+<span class="fc" id="L82">        validarIndice(indice);</span>
 
         T dato;
 
-<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (indice == 0) {</span>
+<span class="fc bfc" id="L86" title="All 2 branches covered.">        if (indice == 0) {</span>
 
-<span class="fc" id="L87">            dato = cabeza.getDato();</span>
-<span class="fc" id="L88">            cabeza = cabeza.getSiguiente();</span>
+<span class="fc" id="L88">            dato = cabeza.getDato();</span>
+<span class="fc" id="L89">            cabeza = cabeza.getSiguiente();</span>
 
         } else {
 
-<span class="fc" id="L92">            Nodo&lt;T&gt; anterior = cabeza;</span>
+<span class="fc" id="L93">            Nodo&lt;T&gt; anterior = cabeza;</span>
 
-<span class="pc bpc" id="L94" title="1 of 2 branches missed.">            for (int i = 0; i &lt; indice - 1; i++) {</span>
-<span class="nc" id="L95">                anterior = anterior.getSiguiente();</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">            for (int i = 0; i &lt; indice - 1; i++) {</span>
+<span class="nc" id="L96">                anterior = anterior.getSiguiente();</span>
             }
 
-<span class="fc" id="L98">            Nodo&lt;T&gt; eliminado =</span>
-<span class="fc" id="L99">                    anterior.getSiguiente();</span>
+<span class="fc" id="L99">            Nodo&lt;T&gt; eliminado =</span>
+<span class="fc" id="L100">                    anterior.getSiguiente();</span>
 
-<span class="fc" id="L101">            dato = eliminado.getDato();</span>
+<span class="fc" id="L102">            dato = eliminado.getDato();</span>
 
-<span class="fc" id="L103">            anterior.setSiguiente(</span>
-<span class="fc" id="L104">                    eliminado.getSiguiente()</span>
+<span class="fc" id="L104">            anterior.setSiguiente(</span>
+<span class="fc" id="L105">                    eliminado.getSiguiente()</span>
             );
         }
 
-<span class="fc" id="L108">        tamaño--;</span>
+<span class="fc" id="L109">        tamaño--;</span>
 
-<span class="fc" id="L110">        return dato;</span>
+<span class="fc" id="L111">        return dato;</span>
     }
 
     /**
@@ -116,7 +117,7 @@ public class ListaEnlazada&lt;T&gt; {
      * @return Tamaño de la lista.
      */
     public int size() {
-<span class="fc" id="L119">        return tamaño;</span>
+<span class="fc" id="L120">        return tamaño;</span>
     }
 
     /**
@@ -125,14 +126,13 @@ public class ListaEnlazada&lt;T&gt; {
      * @return true si está vacía.
      */
     public boolean isEmpty() {
-<span class="fc bfc" id="L128" title="All 2 branches covered.">        return cabeza == null;</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">        return cabeza == null;</span>
     }
 
     /**
      * Elimina todos los elementos.
      */
     public void clear() {
-
 <span class="fc" id="L136">        cabeza = null;</span>
 <span class="fc" id="L137">        tamaño = 0;</span>
 <span class="fc" id="L138">    }</span>
@@ -140,10 +140,11 @@ public class ListaEnlazada&lt;T&gt; {
     private void validarIndice(int indice) {
 
 <span class="fc bfc" id="L142" title="All 4 branches covered.">        if (indice &lt; 0 || indice &gt;= tamaño) {</span>
-<span class="fc" id="L143">            throw new IndexOutOfBoundsException(</span>
+
+<span class="fc" id="L144">            throw new IndexOutOfBoundsException(</span>
                     &quot;Índice fuera de rango.&quot;
             );
         }
-<span class="fc" id="L147">    }</span>
+<span class="fc" id="L148">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

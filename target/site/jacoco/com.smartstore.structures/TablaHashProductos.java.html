@@ -2,28 +2,60 @@
 
 import com.smartstore.model.Producto;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * Representa una tabla hash para almacenar productos.
  *
- * Los productos se identifican mediante su código,
- * permitiendo realizar búsquedas rápidas por clave.
+ * Utiliza encadenamiento separado para manejar colisiones.
  *
  * @author Jonathan Mendez
  * @version 1.0
  */
 public class TablaHashProductos {
 
-    private Map&lt;String, Producto&gt; productos;
+    private static final int CAPACIDAD = 10;
+
+    private NodoHash[] tabla;
+    private int cantidad;
+
+    /**
+     * Nodo interno utilizado para manejar las colisiones
+     * mediante encadenamiento.
+     */
+    private static class NodoHash {
+
+        private String codigo;
+        private Producto producto;
+        private NodoHash siguiente;
+
+        public NodoHash(
+                String codigo,
+<span class="fc" id="L32">                Producto producto) {</span>
+
+<span class="fc" id="L34">            this.codigo = codigo;</span>
+<span class="fc" id="L35">            this.producto = producto;</span>
+<span class="fc" id="L36">        }</span>
+    }
 
     /**
      * Constructor de la tabla hash.
      */
-<span class="fc" id="L24">    public TablaHashProductos() {</span>
-<span class="fc" id="L25">        productos = new HashMap&lt;&gt;();</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L42">    public TablaHashProductos() {</span>
+
+<span class="fc" id="L44">        tabla = new NodoHash[CAPACIDAD];</span>
+<span class="fc" id="L45">        cantidad = 0;</span>
+<span class="fc" id="L46">    }</span>
+
+    /**
+     * Calcula la posición de una clave dentro de la tabla.
+     *
+     * @param codigo Código del producto.
+     * @return Índice correspondiente.
+     */
+    private int calcularIndice(String codigo) {
+
+<span class="fc" id="L56">        return Math.abs(codigo.hashCode())</span>
+                % CAPACIDAD;
+    }
 
     /**
      * Agrega un producto a la tabla.
@@ -32,23 +64,39 @@ public class TablaHashProductos {
      */
     public void agregar(Producto producto) {
 
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (producto == null) {</span>
-<span class="fc" id="L36">            throw new IllegalArgumentException(</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (producto == null) {</span>
+<span class="fc" id="L68">            throw new IllegalArgumentException(</span>
                     &quot;El producto no puede ser nulo.&quot;
             );
         }
 
-<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (productos.containsKey(producto.getCodigo())) {</span>
-<span class="fc" id="L42">            throw new IllegalArgumentException(</span>
-                    &quot;Ya existe un producto con ese código.&quot;
-            );
+<span class="fc" id="L73">        String codigo = producto.getCodigo();</span>
+
+<span class="fc" id="L75">        int indice = calcularIndice(codigo);</span>
+
+<span class="fc" id="L77">        NodoHash actual = tabla[indice];</span>
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        while (actual != null) {</span>
+
+<span class="fc bfc" id="L81" title="All 2 branches covered.">            if (actual.codigo.equals(codigo)) {</span>
+
+<span class="fc" id="L83">                throw new IllegalArgumentException(</span>
+                        &quot;Ya existe un producto con ese código.&quot;
+                );
+            }
+
+<span class="fc" id="L88">            actual = actual.siguiente;</span>
         }
 
-<span class="fc" id="L47">        productos.put(</span>
-<span class="fc" id="L48">                producto.getCodigo(),</span>
-                producto
-        );
-<span class="fc" id="L51">    }</span>
+<span class="fc" id="L91">        NodoHash nuevo =</span>
+                new NodoHash(codigo, producto);
+
+<span class="fc" id="L94">        nuevo.siguiente = tabla[indice];</span>
+
+<span class="fc" id="L96">        tabla[indice] = nuevo;</span>
+
+<span class="fc" id="L98">        cantidad++;</span>
+<span class="fc" id="L99">    }</span>
 
     /**
      * Busca un producto mediante su código.
@@ -58,13 +106,22 @@ public class TablaHashProductos {
      */
     public Producto buscar(String codigo) {
 
-<span class="fc bfc" id="L61" title="All 4 branches covered.">        if (codigo == null || codigo.isBlank()) {</span>
-<span class="fc" id="L62">            throw new IllegalArgumentException(</span>
-                    &quot;El código es obligatorio.&quot;
-            );
+<span class="fc" id="L109">        validarCodigo(codigo);</span>
+
+<span class="fc" id="L111">        int indice = calcularIndice(codigo);</span>
+
+<span class="fc" id="L113">        NodoHash actual = tabla[indice];</span>
+
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        while (actual != null) {</span>
+
+<span class="fc bfc" id="L117" title="All 2 branches covered.">            if (actual.codigo.equals(codigo)) {</span>
+<span class="fc" id="L118">                return actual.producto;</span>
+            }
+
+<span class="fc" id="L121">            actual = actual.siguiente;</span>
         }
 
-<span class="fc" id="L67">        return productos.get(codigo);</span>
+<span class="fc" id="L124">        return null;</span>
     }
 
     /**
@@ -75,13 +132,35 @@ public class TablaHashProductos {
      */
     public Producto eliminar(String codigo) {
 
-<span class="pc bpc" id="L78" title="2 of 4 branches missed.">        if (codigo == null || codigo.isBlank()) {</span>
-<span class="nc" id="L79">            throw new IllegalArgumentException(</span>
-                    &quot;El código es obligatorio.&quot;
-            );
+<span class="fc" id="L135">        validarCodigo(codigo);</span>
+
+<span class="fc" id="L137">        int indice = calcularIndice(codigo);</span>
+
+<span class="fc" id="L139">        NodoHash actual = tabla[indice];</span>
+<span class="fc" id="L140">        NodoHash anterior = null;</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        while (actual != null) {</span>
+
+<span class="pc bpc" id="L144" title="1 of 2 branches missed.">            if (actual.codigo.equals(codigo)) {</span>
+
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">                if (anterior == null) {</span>
+<span class="fc" id="L147">                    tabla[indice] =</span>
+                            actual.siguiente;
+                } else {
+<span class="nc" id="L150">                    anterior.siguiente =</span>
+                            actual.siguiente;
+                }
+
+<span class="fc" id="L154">                cantidad--;</span>
+
+<span class="fc" id="L156">                return actual.producto;</span>
+            }
+
+<span class="nc" id="L159">            anterior = actual;</span>
+<span class="nc" id="L160">            actual = actual.siguiente;</span>
         }
 
-<span class="fc" id="L84">        return productos.remove(codigo);</span>
+<span class="nc" id="L163">        return null;</span>
     }
 
     /**
@@ -92,11 +171,11 @@ public class TablaHashProductos {
      */
     public boolean contiene(String codigo) {
 
-<span class="pc bpc" id="L95" title="2 of 4 branches missed.">        if (codigo == null || codigo.isBlank()) {</span>
-<span class="nc" id="L96">            return false;</span>
+<span class="pc bpc" id="L174" title="2 of 4 branches missed.">        if (codigo == null || codigo.isBlank()) {</span>
+<span class="nc" id="L175">            return false;</span>
         }
 
-<span class="fc" id="L99">        return productos.containsKey(codigo);</span>
+<span class="fc bfc" id="L178" title="All 2 branches covered.">        return buscar(codigo) != null;</span>
     }
 
     /**
@@ -105,8 +184,7 @@ public class TablaHashProductos {
      * @return Cantidad de productos.
      */
     public int size() {
-
-<span class="fc" id="L109">        return productos.size();</span>
+<span class="fc" id="L187">        return cantidad;</span>
     }
 
     /**
@@ -115,8 +193,7 @@ public class TablaHashProductos {
      * @return true si está vacía.
      */
     public boolean isEmpty() {
-
-<span class="fc" id="L119">        return productos.isEmpty();</span>
+<span class="pc bpc" id="L196" title="1 of 2 branches missed.">        return cantidad == 0;</span>
     }
 
     /**
@@ -124,7 +201,18 @@ public class TablaHashProductos {
      */
     public void clear() {
 
-<span class="fc" id="L127">        productos.clear();</span>
-<span class="fc" id="L128">    }</span>
+<span class="fc" id="L204">        tabla = new NodoHash[CAPACIDAD];</span>
+<span class="fc" id="L205">        cantidad = 0;</span>
+<span class="fc" id="L206">    }</span>
+
+    private void validarCodigo(String codigo) {
+
+<span class="fc bfc" id="L210" title="All 4 branches covered.">        if (codigo == null || codigo.isBlank()) {</span>
+
+<span class="fc" id="L212">            throw new IllegalArgumentException(</span>
+                    &quot;El código es obligatorio.&quot;
+            );
+        }
+<span class="fc" id="L216">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -292,4 +292,58 @@ public class ArbolCategoriasTest {
                 arbol.buscar(5)
         );
     }
+    
+    @Test
+void recorridoPreOrdenDebeRecorrerCorrectamente() {
+
+    arbol.insertar(
+            crearCategoria(5)
+    );
+
+    arbol.insertar(
+            crearCategoria(3)
+    );
+
+    arbol.insertar(
+            crearCategoria(8)
+    );
+
+    arbol.insertar(
+            crearCategoria(1)
+    );
+
+    arbol.insertar(
+            crearCategoria(4)
+    );
+
+    List<Categoria> resultado =
+            arbol.preOrden();
+
+    assertEquals(5, resultado.size());
+
+    assertEquals(
+            5,
+            resultado.get(0).getId()
+    );
+
+    assertEquals(
+            3,
+            resultado.get(1).getId()
+    );
+
+    assertEquals(
+            1,
+            resultado.get(2).getId()
+    );
+
+    assertEquals(
+            4,
+            resultado.get(3).getId()
+    );
+
+    assertEquals(
+            8,
+            resultado.get(4).getId()
+    );
+}
 }

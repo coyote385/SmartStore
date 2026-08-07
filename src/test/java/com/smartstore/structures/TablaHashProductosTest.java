@@ -182,4 +182,32 @@ public class TablaHashProductosTest {
         assertTrue(tabla.isEmpty());
         assertEquals(0, tabla.size());
     }
+
+    @Test
+void debeManejarColisionesCorrectamente() {
+
+    Producto producto1 =
+            crearProducto("Aa");
+
+    Producto producto2 =
+            crearProducto("BB");
+
+    tabla.agregar(producto1);
+    tabla.agregar(producto2);
+
+    assertEquals(
+            producto1,
+            tabla.buscar("Aa")
+    );
+
+    assertEquals(
+            producto2,
+            tabla.buscar("BB")
+    );
+
+    assertEquals(
+            2,
+            tabla.size()
+    );
+}
 }

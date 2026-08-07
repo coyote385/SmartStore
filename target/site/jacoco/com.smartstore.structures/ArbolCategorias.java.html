@@ -166,6 +166,45 @@ import java.util.List;
 <span class="fc" id="L166">    }</span>
 
     /**
+ * Obtiene las categorías mediante recorrido preorden.
+ *
+ * @return Lista de categorías en orden preorden.
+ */
+public List&lt;Categoria&gt; preOrden() {
+
+<span class="fc" id="L175">    List&lt;Categoria&gt; resultado =</span>
+            new ArrayList&lt;&gt;();
+
+<span class="fc" id="L178">    preOrdenRecursivo(</span>
+            raiz,
+            resultado
+    );
+
+<span class="fc" id="L183">    return resultado;</span>
+}
+
+private void preOrdenRecursivo(
+        Nodo nodo,
+        List&lt;Categoria&gt; resultado) {
+
+<span class="fc bfc" id="L190" title="All 2 branches covered.">    if (nodo == null) {</span>
+<span class="fc" id="L191">        return;</span>
+    }
+
+<span class="fc" id="L194">    resultado.add(nodo.categoria);</span>
+
+<span class="fc" id="L196">    preOrdenRecursivo(</span>
+            nodo.izquierdo,
+            resultado
+    );
+
+<span class="fc" id="L201">    preOrdenRecursivo(</span>
+            nodo.derecho,
+            resultado
+    );
+<span class="fc" id="L205">}</span>
+
+    /**
      * Elimina una categoría por su ID.
      *
      * @param id Identificador de la categoría.
@@ -173,79 +212,79 @@ import java.util.List;
      */
     public boolean eliminar(int id) {
 
-<span class="fc bfc" id="L176" title="All 2 branches covered.">        if (buscar(id) == null) {</span>
-<span class="fc" id="L177">            return false;</span>
+<span class="fc bfc" id="L215" title="All 2 branches covered.">        if (buscar(id) == null) {</span>
+<span class="fc" id="L216">            return false;</span>
         }
 
-<span class="fc" id="L180">        raiz = eliminarRecursivo(</span>
+<span class="fc" id="L219">        raiz = eliminarRecursivo(</span>
                 raiz,
                 id
         );
 
-<span class="fc" id="L185">        return true;</span>
+<span class="fc" id="L224">        return true;</span>
     }
 
     private Nodo eliminarRecursivo(
             Nodo nodo,
             int id) {
 
-<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (nodo == null) {</span>
-<span class="nc" id="L193">            return null;</span>
+<span class="pc bpc" id="L231" title="1 of 2 branches missed.">        if (nodo == null) {</span>
+<span class="nc" id="L232">            return null;</span>
         }
 
-<span class="fc bfc" id="L196" title="All 2 branches covered.">        if (id &lt; nodo.categoria.getId()) {</span>
+<span class="fc bfc" id="L235" title="All 2 branches covered.">        if (id &lt; nodo.categoria.getId()) {</span>
 
-<span class="fc" id="L198">            nodo.izquierdo =</span>
-<span class="fc" id="L199">                    eliminarRecursivo(</span>
+<span class="fc" id="L237">            nodo.izquierdo =</span>
+<span class="fc" id="L238">                    eliminarRecursivo(</span>
                             nodo.izquierdo,
                             id
                     );
 
-<span class="pc bpc" id="L204" title="1 of 2 branches missed.">        } else if (id &gt; nodo.categoria.getId()) {</span>
+<span class="pc bpc" id="L243" title="1 of 2 branches missed.">        } else if (id &gt; nodo.categoria.getId()) {</span>
 
-<span class="nc" id="L206">            nodo.derecho =</span>
-<span class="nc" id="L207">                    eliminarRecursivo(</span>
+<span class="nc" id="L245">            nodo.derecho =</span>
+<span class="nc" id="L246">                    eliminarRecursivo(</span>
                             nodo.derecho,
                             id
                     );
 
         } else {
 
-<span class="fc bfc" id="L214" title="All 2 branches covered.">            if (nodo.izquierdo == null) {</span>
-<span class="fc" id="L215">                return nodo.derecho;</span>
+<span class="fc bfc" id="L253" title="All 2 branches covered.">            if (nodo.izquierdo == null) {</span>
+<span class="fc" id="L254">                return nodo.derecho;</span>
             }
 
-<span class="fc bfc" id="L218" title="All 2 branches covered.">            if (nodo.derecho == null) {</span>
-<span class="fc" id="L219">                return nodo.izquierdo;</span>
+<span class="fc bfc" id="L257" title="All 2 branches covered.">            if (nodo.derecho == null) {</span>
+<span class="fc" id="L258">                return nodo.izquierdo;</span>
             }
 
-<span class="fc" id="L222">            Nodo sucesor =</span>
-<span class="fc" id="L223">                    encontrarMinimo(</span>
+<span class="fc" id="L261">            Nodo sucesor =</span>
+<span class="fc" id="L262">                    encontrarMinimo(</span>
                             nodo.derecho
                     );
 
-<span class="fc" id="L227">            nodo.categoria =</span>
+<span class="fc" id="L266">            nodo.categoria =</span>
                     sucesor.categoria;
 
-<span class="fc" id="L230">            nodo.derecho =</span>
-<span class="fc" id="L231">                    eliminarRecursivo(</span>
+<span class="fc" id="L269">            nodo.derecho =</span>
+<span class="fc" id="L270">                    eliminarRecursivo(</span>
                             nodo.derecho,
-<span class="fc" id="L233">                            sucesor.categoria.getId()</span>
+<span class="fc" id="L272">                            sucesor.categoria.getId()</span>
                     );
         }
 
-<span class="fc" id="L237">        return nodo;</span>
+<span class="fc" id="L276">        return nodo;</span>
     }
 
     private Nodo encontrarMinimo(Nodo nodo) {
 
-<span class="fc" id="L242">        Nodo actual = nodo;</span>
+<span class="fc" id="L281">        Nodo actual = nodo;</span>
 
-<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        while (actual.izquierdo != null) {</span>
-<span class="nc" id="L245">            actual = actual.izquierdo;</span>
+<span class="pc bpc" id="L283" title="1 of 2 branches missed.">        while (actual.izquierdo != null) {</span>
+<span class="nc" id="L284">            actual = actual.izquierdo;</span>
         }
 
-<span class="fc" id="L248">        return actual;</span>
+<span class="fc" id="L287">        return actual;</span>
     }
 
     /**
@@ -255,7 +294,7 @@ import java.util.List;
      */
     public boolean isEmpty() {
 
-<span class="fc bfc" id="L258" title="All 2 branches covered.">        return raiz == null;</span>
+<span class="fc bfc" id="L297" title="All 2 branches covered.">        return raiz == null;</span>
     }
 
     /**
@@ -263,7 +302,7 @@ import java.util.List;
      */
     public void clear() {
 
-<span class="fc" id="L266">        raiz = null;</span>
-<span class="fc" id="L267">    }</span>
+<span class="fc" id="L305">        raiz = null;</span>
+<span class="fc" id="L306">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

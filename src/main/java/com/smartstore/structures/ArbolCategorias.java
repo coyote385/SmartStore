@@ -166,6 +166,45 @@ public class ArbolCategorias {
     }
 
     /**
+ * Obtiene las categorías mediante recorrido preorden.
+ *
+ * @return Lista de categorías en orden preorden.
+ */
+public List<Categoria> preOrden() {
+
+    List<Categoria> resultado =
+            new ArrayList<>();
+
+    preOrdenRecursivo(
+            raiz,
+            resultado
+    );
+
+    return resultado;
+}
+
+private void preOrdenRecursivo(
+        Nodo nodo,
+        List<Categoria> resultado) {
+
+    if (nodo == null) {
+        return;
+    }
+
+    resultado.add(nodo.categoria);
+
+    preOrdenRecursivo(
+            nodo.izquierdo,
+            resultado
+    );
+
+    preOrdenRecursivo(
+            nodo.derecho,
+            resultado
+    );
+}
+
+    /**
      * Elimina una categoría por su ID.
      *
      * @param id Identificador de la categoría.

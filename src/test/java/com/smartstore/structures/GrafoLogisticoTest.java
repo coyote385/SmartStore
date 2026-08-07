@@ -3,8 +3,6 @@ package com.smartstore.structures;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GrafoLogisticoTest {
@@ -75,94 +73,6 @@ public class GrafoLogisticoTest {
     }
 
     @Test
-    void bfsDebeRecorrerElGrafo() {
-
-        grafo.agregarConexion(
-                "A",
-                "B"
-        );
-
-        grafo.agregarConexion(
-                "A",
-                "C"
-        );
-
-        grafo.agregarConexion(
-                "B",
-                "D"
-        );
-
-        List<String> recorrido =
-                grafo.bfs("A");
-
-        assertEquals(
-                "A",
-                recorrido.get(0)
-        );
-
-        assertTrue(
-                recorrido.contains("B")
-        );
-
-        assertTrue(
-                recorrido.contains("C")
-        );
-
-        assertTrue(
-                recorrido.contains("D")
-        );
-
-        assertEquals(
-                4,
-                recorrido.size()
-        );
-    }
-
-    @Test
-    void dfsDebeRecorrerElGrafo() {
-
-        grafo.agregarConexion(
-                "A",
-                "B"
-        );
-
-        grafo.agregarConexion(
-                "A",
-                "C"
-        );
-
-        grafo.agregarConexion(
-                "B",
-                "D"
-        );
-
-        List<String> recorrido =
-                grafo.dfs("A");
-
-        assertEquals(
-                "A",
-                recorrido.get(0)
-        );
-
-        assertTrue(
-                recorrido.contains("B")
-        );
-
-        assertTrue(
-                recorrido.contains("C")
-        );
-
-        assertTrue(
-                recorrido.contains("D")
-        );
-
-        assertEquals(
-                4,
-                recorrido.size()
-        );
-    }
-
-    @Test
     void puntoNuloDebeLanzarExcepcion() {
 
         assertThrows(
@@ -178,15 +88,6 @@ public class GrafoLogisticoTest {
                 IllegalArgumentException.class,
                 () -> grafo.agregarPunto("")
         );
-    }
-
-    @Test
-    void bfsDePuntoInexistenteDebeRetornarListaVacia() {
-
-        List<String> resultado =
-                grafo.bfs("Inexistente");
-
-        assertTrue(resultado.isEmpty());
     }
 
     @Test

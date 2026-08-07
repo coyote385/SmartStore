@@ -1,6 +1,9 @@
 package com.smartstore.structures;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Representa un grafo para modelar las conexiones
@@ -56,12 +59,18 @@ public class GrafoLogistico {
         agregarPunto(origen);
         agregarPunto(destino);
 
-        if (!conexiones.get(origen).contains(destino)) {
-            conexiones.get(origen).add(destino);
+        if (!conexiones.get(origen)
+                .contains(destino)) {
+
+            conexiones.get(origen)
+                    .add(destino);
         }
 
-        if (!conexiones.get(destino).contains(origen)) {
-            conexiones.get(destino).add(origen);
+        if (!conexiones.get(destino)
+                .contains(origen)) {
+
+            conexiones.get(destino)
+                    .add(origen);
         }
     }
 
@@ -85,103 +94,6 @@ public class GrafoLogistico {
     }
 
     /**
-     * Recorre el grafo utilizando BFS.
-     *
-     * @param inicio Punto inicial.
-     * @return Lista de puntos visitados.
-     */
-    public List<String> bfs(String inicio) {
-
-        validarPunto(inicio);
-
-        List<String> recorrido =
-                new ArrayList<>();
-
-        if (!conexiones.containsKey(inicio)) {
-            return recorrido;
-        }
-
-        Queue<String> cola =
-                new LinkedList<>();
-
-        Set<String> visitados =
-                new HashSet<>();
-
-        cola.offer(inicio);
-        visitados.add(inicio);
-
-        while (!cola.isEmpty()) {
-
-            String actual = cola.poll();
-
-            recorrido.add(actual);
-
-            for (String vecino :
-                    conexiones.get(actual)) {
-
-                if (!visitados.contains(vecino)) {
-
-                    visitados.add(vecino);
-                    cola.offer(vecino);
-                }
-            }
-        }
-
-        return recorrido;
-    }
-
-    /**
-     * Recorre el grafo utilizando DFS.
-     *
-     * @param inicio Punto inicial.
-     * @return Lista de puntos visitados.
-     */
-    public List<String> dfs(String inicio) {
-
-        validarPunto(inicio);
-
-        List<String> recorrido =
-                new ArrayList<>();
-
-        if (!conexiones.containsKey(inicio)) {
-            return recorrido;
-        }
-
-        Set<String> visitados =
-                new HashSet<>();
-
-        dfsRecursivo(
-                inicio,
-                visitados,
-                recorrido
-        );
-
-        return recorrido;
-    }
-
-    private void dfsRecursivo(
-            String actual,
-            Set<String> visitados,
-            List<String> recorrido) {
-
-        visitados.add(actual);
-        recorrido.add(actual);
-
-        for (String vecino :
-                conexiones.get(actual)) {
-
-            if (!visitados.contains(vecino)) {
-
-                dfsRecursivo(
-                        vecino,
-                        visitados,
-                        recorrido
-                );
-            }
-        }
-    }
-
-    /**
      * Verifica si existe un punto.
      *
      * @param punto Punto que se desea consultar.
@@ -202,7 +114,6 @@ public class GrafoLogistico {
      * @return Número de puntos.
      */
     public int cantidadPuntos() {
-
         return conexiones.size();
     }
 
@@ -212,7 +123,6 @@ public class GrafoLogistico {
      * @return true si está vacío.
      */
     public boolean isEmpty() {
-
         return conexiones.isEmpty();
     }
 
@@ -220,7 +130,6 @@ public class GrafoLogistico {
      * Elimina todos los puntos y conexiones.
      */
     public void clear() {
-
         conexiones.clear();
     }
 
