@@ -47,8 +47,8 @@ public class Proveedor {
 
     public void setId(int id) {
 
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">        if (id &lt;= 0) {</span>
-<span class="nc" id="L51">            throw new IllegalArgumentException(&quot;El ID debe ser mayor que cero.&quot;);</span>
+<span class="fc bfc" id="L50" title="All 2 branches covered.">        if (id &lt;= 0) {</span>
+<span class="fc" id="L51">            throw new IllegalArgumentException(&quot;El ID debe ser mayor que cero.&quot;);</span>
         }
 
 <span class="fc" id="L54">        this.id = id;</span>
@@ -68,13 +68,13 @@ public class Proveedor {
 <span class="fc" id="L68">    }</span>
 
     public String getNit() {
-<span class="nc" id="L71">        return nit;</span>
+<span class="fc" id="L71">        return nit;</span>
     }
 
     public void setNit(String nit) {
 
-<span class="pc bpc" id="L76" title="2 of 4 branches missed.">        if (nit == null || nit.trim().isEmpty()) {</span>
-<span class="nc" id="L77">            throw new IllegalArgumentException(&quot;El NIT es obligatorio.&quot;);</span>
+<span class="pc bpc" id="L76" title="1 of 4 branches missed.">        if (nit == null || nit.trim().isEmpty()) {</span>
+<span class="fc" id="L77">            throw new IllegalArgumentException(&quot;El NIT es obligatorio.&quot;);</span>
         }
 
 <span class="fc" id="L80">        this.nit = nit;</span>
@@ -86,8 +86,8 @@ public class Proveedor {
 
     public void setTelefono(String telefono) {
 
-<span class="pc bpc" id="L89" title="2 of 4 branches missed.">        if (telefono == null || telefono.trim().isEmpty()) {</span>
-<span class="nc" id="L90">            throw new IllegalArgumentException(&quot;El teléfono es obligatorio.&quot;);</span>
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">        if (telefono == null || telefono.trim().isEmpty()) {</span>
+<span class="fc" id="L90">            throw new IllegalArgumentException(&quot;El teléfono es obligatorio.&quot;);</span>
         }
 
 <span class="fc" id="L93">        this.telefono = telefono;</span>
@@ -99,7 +99,7 @@ public class Proveedor {
 
     public void setCorreo(String correo) {
 
-<span class="pc bpc" id="L102" title="1 of 4 branches missed.">        if (correo == null || !correo.contains(&quot;@&quot;)) {</span>
+<span class="fc bfc" id="L102" title="All 4 branches covered.">        if (correo == null || !correo.contains(&quot;@&quot;)) {</span>
 <span class="fc" id="L103">            throw new IllegalArgumentException(&quot;Correo electrónico inválido.&quot;);</span>
         }
 
@@ -107,20 +107,20 @@ public class Proveedor {
 <span class="fc" id="L107">    }</span>
 
     public String getDireccion() {
-<span class="nc" id="L110">        return direccion;</span>
+<span class="fc" id="L110">        return direccion;</span>
     }
 
     public void setDireccion(String direccion) {
 
-<span class="pc bpc" id="L115" title="2 of 4 branches missed.">        if (direccion == null || direccion.trim().isEmpty()) {</span>
-<span class="nc" id="L116">            throw new IllegalArgumentException(&quot;La dirección es obligatoria.&quot;);</span>
+<span class="pc bpc" id="L115" title="1 of 4 branches missed.">        if (direccion == null || direccion.trim().isEmpty()) {</span>
+<span class="fc" id="L116">            throw new IllegalArgumentException(&quot;La dirección es obligatoria.&quot;);</span>
         }
 
 <span class="fc" id="L119">        this.direccion = direccion;</span>
 <span class="fc" id="L120">    }</span>
 
     public boolean isActivo() {
-<span class="nc" id="L123">        return activo;</span>
+<span class="fc" id="L123">        return activo;</span>
     }
 
     public void setActivo(boolean activo) {
@@ -138,7 +138,7 @@ public class Proveedor {
 
 <span class="fc" id="L139">        Proveedor other = (Proveedor) obj;</span>
 
-<span class="pc bpc" id="L141" title="1 of 2 branches missed.">        return id == other.id;</span>
+<span class="fc bfc" id="L141" title="All 2 branches covered.">        return id == other.id;</span>
     }
 
     @Override

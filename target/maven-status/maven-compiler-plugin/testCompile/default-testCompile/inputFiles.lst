@@ -1,3 +1,8 @@
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\exceptions\ClienteNoEncontradoExceptionTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\exceptions\CodigoDuplicadoExceptionTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\exceptions\PedidoNoEncontradoExceptionTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\exceptions\ProductoNoEncontradoExceptionTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\exceptions\StockInsuficienteExceptionTest.java
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\CategoriaTest.java
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\ClienteTest.java
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\DetallePedidoTest.java
@@ -5,6 +10,6 @@ C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\mode
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\PedidoTest.java
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\ProductoTest.java
 C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\model\ProveedorTest.java
-C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\services\ClienteServiceTest.java
-C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\services\InventarioServiceTest.java
-C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\services\PedidoServiceTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\service\ClienteServiceTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\service\InventarioServiceTest.java
+C:\Users\jonat\Desktop\cosas\Tienda\SmartStore\src\test\java\com\smartstore\service\PedidoServiceTest.java

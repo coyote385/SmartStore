@@ -1,6 +1,12 @@
 package com.smartstore.service;
 
-import com.smartstore.model.*;
+import com.smartstore.model.Categoria;
+import com.smartstore.model.Cliente;
+import com.smartstore.model.DetallePedido;
+import com.smartstore.model.Factura;
+import com.smartstore.model.Pedido;
+import com.smartstore.model.Producto;
+import com.smartstore.model.Proveedor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,42 +39,48 @@ public class PedidoServiceTest {
                 "3001234567",
                 "jonathan@email.com",
                 "Ibague",
-                true);
+                true
+        );
 
         categoria = new Categoria(
-            1,
-        "Tecnología",
-        "Productos tecnológicos",
-        true);
+                1,
+                "Tecnologia",
+                "Productos tecnologicos",
+                true
+        );
 
         proveedor = new Proveedor(
-        1,
-        "Lenovo",
-        "900123456",
-        "3111111111",
-        "contacto@lenovo.com",
-        "Bogotá",
-        true);
+                1,
+                "Lenovo",
+                "900123456",
+                "3111111111",
+                "contacto@lenovo.com",
+                "Bogota",
+                true
+        );
 
         producto = new Producto(
                 "P001",
-                "Portátil",
+                "Portatil",
                 "Laptop Lenovo",
                 2500000,
                 20,
                 5,
                 categoria,
-                proveedor);
+                proveedor
+        );
 
         pedido = new Pedido(
                 1,
                 cliente,
-                "Pendiente");
+                "Pendiente"
+        );
 
         detalle = new DetallePedido(
                 producto,
                 2,
-                producto.getPrecio());
+                producto.getPrecio()
+        );
     }
 
     @Test
@@ -76,7 +88,10 @@ public class PedidoServiceTest {
 
         service.crearPedido(pedido);
 
-        assertEquals(1, service.cantidadPedidos());
+        assertEquals(
+                1,
+                service.cantidadPedidos()
+        );
     }
 
     @Test
@@ -86,7 +101,8 @@ public class PedidoServiceTest {
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> service.crearPedido(pedido));
+                () -> service.crearPedido(pedido)
+        );
     }
 
     @Test
@@ -94,10 +110,15 @@ public class PedidoServiceTest {
 
         service.crearPedido(pedido);
 
-        Pedido encontrado = service.buscarPedido(1);
+        Pedido encontrado =
+                service.buscarPedido(1);
 
         assertNotNull(encontrado);
-        assertEquals(1, encontrado.getId());
+
+        assertEquals(
+                1,
+                encontrado.getId()
+        );
     }
 
     @Test
@@ -105,48 +126,82 @@ public class PedidoServiceTest {
 
         service.crearPedido(pedido);
 
-        assertTrue(service.eliminarPedido(1));
+        assertTrue(
+                service.eliminarPedido(1)
+        );
 
-        assertEquals(0, service.cantidadPedidos());
+        assertEquals(
+                0,
+                service.cantidadPedidos()
+        );
     }
 
     @Test
     void agregarProductoAlPedido() {
 
-        service.agregarProducto(pedido, detalle);
+        service.agregarProducto(
+                pedido,
+                detalle
+        );
 
-        assertEquals(1, pedido.cantidadProductos());
+        assertEquals(
+                1,
+                pedido.cantidadProductos()
+        );
     }
 
     @Test
     void quitarProductoDelPedido() {
 
-        service.agregarProducto(pedido, detalle);
+        service.agregarProducto(
+                pedido,
+                detalle
+        );
 
-        assertTrue(service.quitarProducto(pedido, detalle));
+        assertTrue(
+                service.quitarProducto(
+                        pedido,
+                        detalle
+                )
+        );
 
-        assertEquals(0, pedido.cantidadProductos());
+        assertEquals(
+                0,
+                pedido.cantidadProductos()
+        );
     }
 
     @Test
     void calcularTotalPedido() {
 
-        service.agregarProducto(pedido, detalle);
+        service.agregarProducto(
+                pedido,
+                detalle
+        );
 
         assertEquals(
                 5000000,
-                service.calcularTotal(pedido));
+                service.calcularTotal(pedido)
+        );
     }
 
     @Test
     void generarFactura() {
 
-        service.agregarProducto(pedido, detalle);
+        service.agregarProducto(
+                pedido,
+                detalle
+        );
 
-        Factura factura = service.generarFactura(pedido);
+        Factura factura =
+                service.generarFactura(pedido);
 
         assertNotNull(factura);
-        assertEquals(1, factura.getNumero());
+
+        assertEquals(
+                1,
+                factura.getNumero()
+        );
     }
 
     @Test
@@ -156,7 +211,8 @@ public class PedidoServiceTest {
 
         assertEquals(
                 "Cancelado",
-                pedido.getEstado());
+                pedido.getEstado()
+        );
     }
 
     @Test
@@ -167,7 +223,10 @@ public class PedidoServiceTest {
         List<Pedido> pedidos =
                 service.buscarPedidosPorCliente(cliente);
 
-        assertEquals(1, pedidos.size());
+        assertEquals(
+                1,
+                pedidos.size()
+        );
     }
 
     @Test
@@ -178,7 +237,9 @@ public class PedidoServiceTest {
         List<Pedido> pedidos =
                 service.listarPedidos();
 
-        assertEquals(1, pedidos.size());
+        assertEquals(
+                1,
+                pedidos.size()
+        );
     }
-
 }

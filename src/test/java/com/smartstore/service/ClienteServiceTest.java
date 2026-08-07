@@ -18,6 +18,7 @@ public class ClienteServiceTest {
     }
 
     private Cliente crearCliente() {
+
         return new Cliente(
                 1,
                 "Jonathan",
@@ -25,7 +26,7 @@ public class ClienteServiceTest {
                 "123456",
                 "3001234567",
                 "jonathan@email.com",
-                "Ibagué",
+                "Ibague",
                 true
         );
     }
@@ -52,14 +53,16 @@ public class ClienteServiceTest {
                 "987654",
                 "3000000000",
                 "pedro@email.com",
-                "Bogotá",
+                "Bogota",
                 true
         );
 
         service.agregarCliente(c1);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> service.agregarCliente(c2));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.agregarCliente(c2)
+        );
     }
 
     @Test
@@ -74,14 +77,16 @@ public class ClienteServiceTest {
                 "123456",
                 "3000000000",
                 "pedro@email.com",
-                "Bogotá",
+                "Bogota",
                 true
         );
 
         service.agregarCliente(c1);
 
-        assertThrows(IllegalArgumentException.class,
-                () -> service.agregarCliente(c2));
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.agregarCliente(c2)
+        );
     }
 
     @Test
@@ -104,10 +109,14 @@ public class ClienteServiceTest {
 
         service.agregarCliente(cliente);
 
-        Cliente encontrado = service.buscarPorCedula("123456");
+        Cliente encontrado =
+                service.buscarPorCedula("123456");
 
         assertNotNull(encontrado);
-        assertEquals("Jonathan", encontrado.getNombre());
+        assertEquals(
+                "Jonathan",
+                encontrado.getNombre()
+        );
     }
 
     @Test
@@ -124,16 +133,24 @@ public class ClienteServiceTest {
                 "123456",
                 "3111111111",
                 "juan@email.com",
-                "Medellín",
+                "Medellin",
                 true
         );
 
         service.actualizarCliente(actualizado);
 
-        Cliente resultado = service.buscarPorId(1);
+        Cliente resultado =
+                service.buscarPorId(1);
 
-        assertEquals("Juan", resultado.getNombre());
-        assertEquals("Medellín", resultado.getDireccion());
+        assertEquals(
+                "Juan",
+                resultado.getNombre()
+        );
+
+        assertEquals(
+                "Medellin",
+                resultado.getDireccion()
+        );
     }
 
     @Test
@@ -143,9 +160,14 @@ public class ClienteServiceTest {
 
         service.agregarCliente(cliente);
 
-        assertTrue(service.eliminarCliente(1));
+        assertTrue(
+                service.eliminarCliente(1)
+        );
 
-        assertEquals(0, service.cantidadClientes());
+        assertEquals(
+                0,
+                service.cantidadClientes()
+        );
     }
 
     @Test
@@ -153,9 +175,13 @@ public class ClienteServiceTest {
 
         service.agregarCliente(crearCliente());
 
-        List<Cliente> clientes = service.listarClientes();
+        List<Cliente> clientes =
+                service.listarClientes();
 
-        assertEquals(1, clientes.size());
+        assertEquals(
+                1,
+                clientes.size()
+        );
     }
 
     @Test
@@ -170,15 +196,19 @@ public class ClienteServiceTest {
                 "654321",
                 "3000000000",
                 "pedro@email.com",
-                "Bogotá",
+                "Bogota",
                 false
         );
 
         service.agregarCliente(inactivo);
 
-        List<Cliente> activos = service.obtenerClientesActivos();
+        List<Cliente> activos =
+                service.obtenerClientesActivos();
 
-        assertEquals(1, activos.size());
+        assertEquals(
+                1,
+                activos.size()
+        );
     }
 
     @Test
@@ -193,15 +223,18 @@ public class ClienteServiceTest {
                 "654321",
                 "3000000000",
                 "pedro@email.com",
-                "Bogotá",
+                "Bogota",
                 false
         );
 
         service.agregarCliente(inactivo);
 
-        List<Cliente> inactivos = service.obtenerClientesInactivos();
+        List<Cliente> inactivos =
+                service.obtenerClientesInactivos();
 
-        assertEquals(1, inactivos.size());
+        assertEquals(
+                1,
+                inactivos.size()
+        );
     }
-
 }
