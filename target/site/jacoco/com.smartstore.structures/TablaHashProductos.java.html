@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TablaHashProductos.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.structures</a> &gt; <span class="el_source">TablaHashProductos.java</span></div><h1>TablaHashProductos.java</h1><pre class="source lang-java linenums">package com.smartstore.structures;
+
+import com.smartstore.model.Producto;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Representa una tabla hash para almacenar productos.
+ *
+ * Los productos se identifican mediante su código,
+ * permitiendo realizar búsquedas rápidas por clave.
+ *
+ * @author Jonathan Mendez
+ * @version 1.0
+ */
+public class TablaHashProductos {
+
+    private Map&lt;String, Producto&gt; productos;
+
+    /**
+     * Constructor de la tabla hash.
+     */
+<span class="fc" id="L24">    public TablaHashProductos() {</span>
+<span class="fc" id="L25">        productos = new HashMap&lt;&gt;();</span>
+<span class="fc" id="L26">    }</span>
+
+    /**
+     * Agrega un producto a la tabla.
+     *
+     * @param producto Producto que se desea agregar.
+     */
+    public void agregar(Producto producto) {
+
+<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (producto == null) {</span>
+<span class="fc" id="L36">            throw new IllegalArgumentException(</span>
+                    &quot;El producto no puede ser nulo.&quot;
+            );
+        }
+
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (productos.containsKey(producto.getCodigo())) {</span>
+<span class="fc" id="L42">            throw new IllegalArgumentException(</span>
+                    &quot;Ya existe un producto con ese código.&quot;
+            );
+        }
+
+<span class="fc" id="L47">        productos.put(</span>
+<span class="fc" id="L48">                producto.getCodigo(),</span>
+                producto
+        );
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Busca un producto mediante su código.
+     *
+     * @param codigo Código del producto.
+     * @return Producto encontrado o null si no existe.
+     */
+    public Producto buscar(String codigo) {
+
+<span class="fc bfc" id="L61" title="All 4 branches covered.">        if (codigo == null || codigo.isBlank()) {</span>
+<span class="fc" id="L62">            throw new IllegalArgumentException(</span>
+                    &quot;El código es obligatorio.&quot;
+            );
+        }
+
+<span class="fc" id="L67">        return productos.get(codigo);</span>
+    }
+
+    /**
+     * Elimina un producto mediante su código.
+     *
+     * @param codigo Código del producto.
+     * @return Producto eliminado o null si no existe.
+     */
+    public Producto eliminar(String codigo) {
+
+<span class="pc bpc" id="L78" title="2 of 4 branches missed.">        if (codigo == null || codigo.isBlank()) {</span>
+<span class="nc" id="L79">            throw new IllegalArgumentException(</span>
+                    &quot;El código es obligatorio.&quot;
+            );
+        }
+
+<span class="fc" id="L84">        return productos.remove(codigo);</span>
+    }
+
+    /**
+     * Verifica si existe un producto con determinado código.
+     *
+     * @param codigo Código del producto.
+     * @return true si existe.
+     */
+    public boolean contiene(String codigo) {
+
+<span class="pc bpc" id="L95" title="2 of 4 branches missed.">        if (codigo == null || codigo.isBlank()) {</span>
+<span class="nc" id="L96">            return false;</span>
+        }
+
+<span class="fc" id="L99">        return productos.containsKey(codigo);</span>
+    }
+
+    /**
+     * Obtiene la cantidad de productos almacenados.
+     *
+     * @return Cantidad de productos.
+     */
+    public int size() {
+
+<span class="fc" id="L109">        return productos.size();</span>
+    }
+
+    /**
+     * Verifica si la tabla está vacía.
+     *
+     * @return true si está vacía.
+     */
+    public boolean isEmpty() {
+
+<span class="fc" id="L119">        return productos.isEmpty();</span>
+    }
+
+    /**
+     * Elimina todos los productos.
+     */
+    public void clear() {
+
+<span class="fc" id="L127">        productos.clear();</span>
+<span class="fc" id="L128">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
