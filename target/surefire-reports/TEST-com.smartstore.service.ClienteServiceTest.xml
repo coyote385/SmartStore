@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.smartstore.model.DetallePedidoTest" time="0.197" tests="5" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="com.smartstore.service.ClienteServiceTest" time="0.218" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="17"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -56,9 +56,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="61.0"/>
   </properties>
-  <testcase name="crearDetalleCorrectamente" classname="com.smartstore.model.DetallePedidoTest" time="0.043"/>
-  <testcase name="calcularSubtotal" classname="com.smartstore.model.DetallePedidoTest" time="0.019"/>
-  <testcase name="precioInvalido" classname="com.smartstore.model.DetallePedidoTest" time="0.019"/>
-  <testcase name="cantidadInvalida" classname="com.smartstore.model.DetallePedidoTest" time="0.016"/>
-  <testcase name="cambiarCantidad" classname="com.smartstore.model.DetallePedidoTest" time="0.035"/>
+  <testcase name="obtenerClientesActivos" classname="com.smartstore.service.ClienteServiceTest" time="0.004"/>
+  <testcase name="buscarClientePorId" classname="com.smartstore.service.ClienteServiceTest" time="0.021"/>
+  <testcase name="listarClientes" classname="com.smartstore.service.ClienteServiceTest" time="0.004"/>
+  <testcase name="eliminarCliente" classname="com.smartstore.service.ClienteServiceTest" time="0.023"/>
+  <testcase name="noDebePermitirIdDuplicado" classname="com.smartstore.service.ClienteServiceTest" time="0.015"/>
+  <testcase name="agregarClienteCorrectamente" classname="com.smartstore.service.ClienteServiceTest" time="0.016"/>
+  <testcase name="noDebePermitirCedulaDuplicada" classname="com.smartstore.service.ClienteServiceTest" time="0.015"/>
+  <testcase name="actualizarClienteCorrectamente" classname="com.smartstore.service.ClienteServiceTest" time="0.015"/>
+  <testcase name="obtenerClientesInactivos" classname="com.smartstore.service.ClienteServiceTest" time="0.009"/>
+  <testcase name="buscarClientePorCedula" classname="com.smartstore.service.ClienteServiceTest" time="0.002"/>
 </testsuite>

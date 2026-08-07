@@ -1,11 +1,13 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 SmartStore,com.smartstore.ui,MainFrame,16,0,0,0,6,0,1,0,1,0
 SmartStore,com.smartstore.model,Proveedor,41,142,12,16,12,38,17,15,5,13
-SmartStore,com.smartstore.model,Producto,91,173,20,20,24,52,25,19,7,17
+SmartStore,com.smartstore.model,Producto,88,176,20,20,23,53,24,20,6,18
 SmartStore,com.smartstore.model,Categoria,16,98,7,9,6,26,7,13,1,11
 SmartStore,com.smartstore.model,DetallePedido,32,42,3,3,11,13,6,6,4,5
 SmartStore,com.smartstore.model,Factura,24,54,2,4,6,16,5,7,3,6
-SmartStore,com.smartstore.model,Pedido,32,73,3,5,8,22,7,9,4,8
-SmartStore,com.smartstore.model,Cliente,114,54,23,3,30,19,24,7,12,6
+SmartStore,com.smartstore.model,Pedido,29,76,3,5,7,23,6,10,3,9
+SmartStore,com.smartstore.model,Cliente,54,114,13,13,10,39,14,17,2,16
 SmartStore,com.smartstore,Main,12,0,0,0,5,0,3,0,3,0
+SmartStore,com.smartstore.service,PedidoService,33,139,11,17,8,36,11,15,0,12
 SmartStore,com.smartstore.service,InventarioService,17,102,6,10,6,24,7,8,1,6
+SmartStore,com.smartstore.service,ClienteService,12,184,3,23,3,47,3,20,0,10

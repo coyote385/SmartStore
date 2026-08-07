@@ -2,6 +2,8 @@ com\smartstore\model\Categoria.class
 com\smartstore\model\Pedido.class
 com\smartstore\model\Producto.class
 com\smartstore\model\Proveedor.class
+com\smartstore\service\ClienteService.class
+com\smartstore\service\PedidoService.class
 com\smartstore\ui\MainFrame.class
 com\smartstore\Main.class
 com\smartstore\model\DetallePedido.class

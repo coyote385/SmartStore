@@ -51,7 +51,7 @@ public class Cliente implements Serializable {
 <span class="fc" id="L51">    }</span>
 
     public int getId() {
-<span class="nc" id="L54">        return id;</span>
+<span class="fc" id="L54">        return id;</span>
     }
 
     public void setId(int id) {
@@ -82,64 +82,64 @@ public class Cliente implements Serializable {
 
     public void setApellido(String apellido) {
 
-<span class="nc bnc" id="L85" title="All 4 branches missed.">        if (apellido == null || apellido.isBlank()) {</span>
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if (apellido == null || apellido.isBlank()) {</span>
 <span class="nc" id="L86">            throw new IllegalArgumentException(&quot;El apellido es obligatorio.&quot;);</span>
         }
 
-<span class="nc" id="L89">        this.apellido = apellido;</span>
-<span class="nc" id="L90">    }</span>
+<span class="fc" id="L89">        this.apellido = apellido;</span>
+<span class="fc" id="L90">    }</span>
 
     public String getCedula() {
-<span class="nc" id="L93">        return cedula;</span>
+<span class="fc" id="L93">        return cedula;</span>
     }
 
     public void setCedula(String cedula) {
 
-<span class="nc bnc" id="L98" title="All 4 branches missed.">        if (cedula == null || cedula.isBlank()) {</span>
+<span class="pc bpc" id="L98" title="2 of 4 branches missed.">        if (cedula == null || cedula.isBlank()) {</span>
 <span class="nc" id="L99">            throw new IllegalArgumentException(&quot;La cédula es obligatoria.&quot;);</span>
         }
 
-<span class="nc" id="L102">        this.cedula = cedula;</span>
-<span class="nc" id="L103">    }</span>
+<span class="fc" id="L102">        this.cedula = cedula;</span>
+<span class="fc" id="L103">    }</span>
 
     public String getTelefono() {
-<span class="nc" id="L106">        return telefono;</span>
+<span class="fc" id="L106">        return telefono;</span>
     }
 
     public void setTelefono(String telefono) {
 
-<span class="nc bnc" id="L111" title="All 4 branches missed.">        if (telefono == null || telefono.isBlank()) {</span>
+<span class="pc bpc" id="L111" title="2 of 4 branches missed.">        if (telefono == null || telefono.isBlank()) {</span>
 <span class="nc" id="L112">            throw new IllegalArgumentException(&quot;El teléfono es obligatorio.&quot;);</span>
         }
 
-<span class="nc" id="L115">        this.telefono = telefono;</span>
-<span class="nc" id="L116">    }</span>
+<span class="fc" id="L115">        this.telefono = telefono;</span>
+<span class="fc" id="L116">    }</span>
 
     public String getCorreo() {
-<span class="nc" id="L119">        return correo;</span>
+<span class="fc" id="L119">        return correo;</span>
     }
 
     public void setCorreo(String correo) {
 
-<span class="nc bnc" id="L124" title="All 4 branches missed.">        if (correo == null || correo.isBlank()) {</span>
+<span class="pc bpc" id="L124" title="2 of 4 branches missed.">        if (correo == null || correo.isBlank()) {</span>
 <span class="nc" id="L125">            throw new IllegalArgumentException(&quot;El correo es obligatorio.&quot;);</span>
         }
 
-<span class="nc" id="L128">        this.correo = correo;</span>
-<span class="nc" id="L129">    }</span>
+<span class="fc" id="L128">        this.correo = correo;</span>
+<span class="fc" id="L129">    }</span>
 
     public String getDireccion() {
-<span class="nc" id="L132">        return direccion;</span>
+<span class="fc" id="L132">        return direccion;</span>
     }
 
     public void setDireccion(String direccion) {
 
-<span class="nc bnc" id="L137" title="All 4 branches missed.">        if (direccion == null || direccion.isBlank()) {</span>
+<span class="pc bpc" id="L137" title="2 of 4 branches missed.">        if (direccion == null || direccion.isBlank()) {</span>
 <span class="nc" id="L138">            throw new IllegalArgumentException(&quot;La dirección es obligatoria.&quot;);</span>
         }
 
-<span class="nc" id="L141">        this.direccion = direccion;</span>
-<span class="nc" id="L142">    }</span>
+<span class="fc" id="L141">        this.direccion = direccion;</span>
+<span class="fc" id="L142">    }</span>
 
     public boolean isActivo() {
 <span class="fc" id="L145">        return activo;</span>
