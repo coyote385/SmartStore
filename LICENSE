@@ -1,12 +1,4 @@
-
 ---
-
-# `LICENSE`
-
-Como es un proyecto académico y quieres dejarlo publicado en GitHub, una **MIT** es sencilla y adecuada si ustedes quieren permitir que otros puedan estudiar, modificar y reutilizar el código.
-
-Crea `LICENSE` en la raíz y pega:
-
 ```text
 MIT License
 
