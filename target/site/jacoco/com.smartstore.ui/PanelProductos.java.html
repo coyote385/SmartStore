@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PanelProductos.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.ui</a> &gt; <span class="el_source">PanelProductos.java</span></div><h1>PanelProductos.java</h1><pre class="source lang-java linenums">package com.smartstore.ui;
+
+import com.smartstore.model.Categoria;
+import com.smartstore.model.Producto;
+import com.smartstore.model.Proveedor;
+import com.smartstore.service.InventarioService;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class PanelProductos extends JPanel {
+
+    private final InventarioService inventarioService;
+
+    public PanelProductos(
+<span class="nc" id="L16">            InventarioService inventarioService) {</span>
+
+<span class="nc" id="L18">        this.inventarioService = inventarioService;</span>
+
+<span class="nc" id="L20">        setLayout(new BorderLayout(10, 10));</span>
+
+<span class="nc" id="L22">        JLabel titulo = new JLabel(</span>
+                &quot;Gestión de Productos&quot;,
+                SwingConstants.CENTER
+        );
+
+<span class="nc" id="L27">        titulo.setFont(</span>
+                new Font(&quot;Arial&quot;, Font.BOLD, 24)
+        );
+
+<span class="nc" id="L31">        add(titulo, BorderLayout.NORTH);</span>
+
+<span class="nc" id="L33">        JPanel botones = new JPanel(</span>
+                new FlowLayout()
+        );
+
+<span class="nc" id="L37">        JButton btnRegistrar =</span>
+                new JButton(&quot;Registrar producto&quot;);
+
+<span class="nc" id="L40">        JButton btnBuscar =</span>
+                new JButton(&quot;Buscar producto&quot;);
+
+<span class="nc" id="L43">        JButton btnEliminar =</span>
+                new JButton(&quot;Eliminar producto&quot;);
+
+<span class="nc" id="L46">        JButton btnListar =</span>
+                new JButton(&quot;Listar productos&quot;);
+
+<span class="nc" id="L49">        botones.add(btnRegistrar);</span>
+<span class="nc" id="L50">        botones.add(btnBuscar);</span>
+<span class="nc" id="L51">        botones.add(btnEliminar);</span>
+<span class="nc" id="L52">        botones.add(btnListar);</span>
+
+<span class="nc" id="L54">        add(botones, BorderLayout.CENTER);</span>
+
+<span class="nc" id="L56">        btnRegistrar.addActionListener(e -&gt;</span>
+<span class="nc" id="L57">                registrarProducto()</span>
+        );
+
+<span class="nc" id="L60">        btnBuscar.addActionListener(e -&gt;</span>
+<span class="nc" id="L61">                buscarProducto()</span>
+        );
+
+<span class="nc" id="L64">        btnEliminar.addActionListener(e -&gt;</span>
+<span class="nc" id="L65">                eliminarProducto()</span>
+        );
+
+<span class="nc" id="L68">        btnListar.addActionListener(e -&gt;</span>
+<span class="nc" id="L69">                listarProductos()</span>
+        );
+<span class="nc" id="L71">    }</span>
+
+    private void registrarProducto() {
+
+        try {
+
+<span class="nc" id="L77">            String codigo = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Código:&quot;
+            );
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            if (codigo == null) return;</span>
+
+<span class="nc" id="L84">            String nombre = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Nombre:&quot;
+            );
+
+<span class="nc" id="L89">            String descripcion =</span>
+<span class="nc" id="L90">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Descripción:&quot;
+                    );
+
+<span class="nc" id="L95">            String precioTexto =</span>
+<span class="nc" id="L96">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Precio:&quot;
+                    );
+
+<span class="nc" id="L101">            String stockTexto =</span>
+<span class="nc" id="L102">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Stock:&quot;
+                    );
+
+<span class="nc" id="L107">            String minimoTexto =</span>
+<span class="nc" id="L108">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Stock mínimo:&quot;
+                    );
+
+<span class="nc" id="L113">            String categoriaNombre =</span>
+<span class="nc" id="L114">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Categoría:&quot;
+                    );
+
+<span class="nc" id="L119">            String proveedorNombre =</span>
+<span class="nc" id="L120">                    JOptionPane.showInputDialog(</span>
+                            this,
+                            &quot;Proveedor:&quot;
+                    );
+
+<span class="nc bnc" id="L125" title="All 14 branches missed.">            if (nombre == null ||</span>
+                    descripcion == null ||
+                    precioTexto == null ||
+                    stockTexto == null ||
+                    minimoTexto == null ||
+                    categoriaNombre == null ||
+                    proveedorNombre == null) {
+
+<span class="nc" id="L133">                return;</span>
+            }
+
+<span class="nc" id="L136">            double precio =</span>
+<span class="nc" id="L137">                    Double.parseDouble(precioTexto);</span>
+
+<span class="nc" id="L139">            int stock =</span>
+<span class="nc" id="L140">                    Integer.parseInt(stockTexto);</span>
+
+<span class="nc" id="L142">            int stockMinimo =</span>
+<span class="nc" id="L143">                    Integer.parseInt(minimoTexto);</span>
+
+<span class="nc" id="L145">            Categoria categoria =</span>
+                    new Categoria(
+                            1,
+                            categoriaNombre,
+                            categoriaNombre,
+                            true
+                    );
+
+<span class="nc" id="L153">            Proveedor proveedor =</span>
+                    new Proveedor(
+                            1,
+                            proveedorNombre,
+                            &quot;NIT-&quot; + proveedorNombre,
+                            &quot;3000000000&quot;,
+                            &quot;proveedor@smartstore.com&quot;,
+                            &quot;Colombia&quot;,
+                            true
+                    );
+
+<span class="nc" id="L164">            Producto producto =</span>
+                    new Producto(
+                            codigo,
+                            nombre,
+                            descripcion,
+                            precio,
+                            stock,
+                            stockMinimo,
+                            categoria,
+                            proveedor
+                    );
+
+<span class="nc" id="L176">            inventarioService.registrarProducto(</span>
+                    producto
+            );
+
+<span class="nc" id="L180">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Producto registrado correctamente.&quot;
+            );
+
+<span class="nc" id="L185">        } catch (NumberFormatException ex) {</span>
+
+<span class="nc" id="L187">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Precio, stock y stock mínimo deben ser numéricos.&quot;,
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+<span class="nc" id="L194">        } catch (Exception ex) {</span>
+
+<span class="nc" id="L196">            JOptionPane.showMessageDialog(</span>
+                    this,
+<span class="nc" id="L198">                    ex.getMessage(),</span>
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+<span class="nc" id="L202">        }</span>
+<span class="nc" id="L203">    }</span>
+
+    private void buscarProducto() {
+
+<span class="nc" id="L207">        String codigo =</span>
+<span class="nc" id="L208">                JOptionPane.showInputDialog(</span>
+                        this,
+                        &quot;Código del producto:&quot;
+                );
+
+<span class="nc bnc" id="L213" title="All 2 branches missed.">        if (codigo == null) return;</span>
+
+<span class="nc" id="L215">        Producto producto =</span>
+<span class="nc" id="L216">                inventarioService.buscarPorCodigo(codigo);</span>
+
+<span class="nc bnc" id="L218" title="All 2 branches missed.">        if (producto == null) {</span>
+
+<span class="nc" id="L220">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Producto no encontrado.&quot;
+            );
+
+<span class="nc" id="L225">            return;</span>
+        }
+
+<span class="nc" id="L228">        JOptionPane.showMessageDialog(</span>
+                this,
+<span class="nc" id="L230">                producto.toString(),</span>
+                &quot;Producto encontrado&quot;,
+                JOptionPane.INFORMATION_MESSAGE
+        );
+<span class="nc" id="L234">    }</span>
+
+    private void eliminarProducto() {
+
+<span class="nc" id="L238">        String codigo =</span>
+<span class="nc" id="L239">                JOptionPane.showInputDialog(</span>
+                        this,
+                        &quot;Código del producto:&quot;
+                );
+
+<span class="nc bnc" id="L244" title="All 2 branches missed.">        if (codigo == null) return;</span>
+
+        try {
+
+<span class="nc" id="L248">            inventarioService.eliminarProducto(codigo);</span>
+
+<span class="nc" id="L250">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Producto eliminado correctamente.&quot;
+            );
+
+<span class="nc" id="L255">        } catch (Exception ex) {</span>
+
+<span class="nc" id="L257">            JOptionPane.showMessageDialog(</span>
+                    this,
+<span class="nc" id="L259">                    ex.getMessage(),</span>
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+<span class="nc" id="L263">        }</span>
+<span class="nc" id="L264">    }</span>
+
+    private void listarProductos() {
+
+<span class="nc" id="L268">        StringBuilder texto =</span>
+                new StringBuilder();
+
+        for (Producto producto :
+<span class="nc bnc" id="L272" title="All 2 branches missed.">                inventarioService.obtenerProductos()) {</span>
+
+<span class="nc" id="L274">            texto.append(producto)</span>
+<span class="nc" id="L275">                    .append(&quot;\n\n&quot;);</span>
+<span class="nc" id="L276">        }</span>
+
+<span class="nc bnc" id="L278" title="All 2 branches missed.">        if (texto.length() == 0) {</span>
+<span class="nc" id="L279">            texto.append(&quot;No hay productos registrados.&quot;);</span>
+        }
+
+<span class="nc" id="L282">        JTextArea area =</span>
+<span class="nc" id="L283">                new JTextArea(texto.toString());</span>
+
+<span class="nc" id="L285">        area.setEditable(false);</span>
+
+<span class="nc" id="L287">        JScrollPane scroll =</span>
+                new JScrollPane(area);
+
+<span class="nc" id="L290">        scroll.setPreferredSize(</span>
+                new Dimension(700, 400)
+        );
+
+<span class="nc" id="L294">        JOptionPane.showMessageDialog(</span>
+                this,
+                scroll,
+                &quot;Productos&quot;,
+                JOptionPane.INFORMATION_MESSAGE
+        );
+<span class="nc" id="L300">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

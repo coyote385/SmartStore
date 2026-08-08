@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PanelReportes.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.ui</a> &gt; <span class="el_source">PanelReportes.java</span></div><h1>PanelReportes.java</h1><pre class="source lang-java linenums">package com.smartstore.ui;
+
+import com.smartstore.model.Cliente;
+import com.smartstore.model.Factura;
+import com.smartstore.model.Pedido;
+import com.smartstore.model.Producto;
+import com.smartstore.service.ClienteService;
+import com.smartstore.service.InventarioService;
+import com.smartstore.service.PedidoService;
+
+import javax.swing.*;
+import java.awt.*;
+import java.util.List;
+
+public class PanelReportes extends JPanel {
+
+    private final ClienteService clienteService;
+    private final InventarioService inventarioService;
+    private final PedidoService pedidoService;
+    private final List&lt;Factura&gt; facturas;
+
+    public PanelReportes(
+            ClienteService clienteService,
+            InventarioService inventarioService,
+            PedidoService pedidoService,
+<span class="nc" id="L26">            List&lt;Factura&gt; facturas) {</span>
+
+<span class="nc" id="L28">        this.clienteService = clienteService;</span>
+<span class="nc" id="L29">        this.inventarioService = inventarioService;</span>
+<span class="nc" id="L30">        this.pedidoService = pedidoService;</span>
+<span class="nc" id="L31">        this.facturas = facturas;</span>
+
+<span class="nc" id="L33">        setLayout(new BorderLayout(10, 10));</span>
+
+<span class="nc" id="L35">        JLabel titulo = new JLabel(</span>
+                &quot;Reportes&quot;,
+                SwingConstants.CENTER
+        );
+
+<span class="nc" id="L40">        titulo.setFont(</span>
+                new Font(&quot;Arial&quot;, Font.BOLD, 24)
+        );
+
+<span class="nc" id="L44">        add(titulo, BorderLayout.NORTH);</span>
+
+<span class="nc" id="L46">        JPanel contenido = new JPanel(</span>
+                new GridLayout(3, 1, 10, 10)
+        );
+
+<span class="nc" id="L50">        JButton btnProductos =</span>
+                new JButton(&quot;Reporte de productos&quot;);
+
+<span class="nc" id="L53">        JButton btnPedidos =</span>
+                new JButton(&quot;Reporte de pedidos&quot;);
+
+<span class="nc" id="L56">        JButton btnClientes =</span>
+                new JButton(&quot;Reporte de clientes&quot;);
+
+<span class="nc" id="L59">        contenido.add(btnProductos);</span>
+<span class="nc" id="L60">        contenido.add(btnPedidos);</span>
+<span class="nc" id="L61">        contenido.add(btnClientes);</span>
+
+<span class="nc" id="L63">        add(contenido, BorderLayout.CENTER);</span>
+
+<span class="nc" id="L65">        btnProductos.addActionListener(e -&gt;</span>
+<span class="nc" id="L66">                reporteProductos()</span>
+        );
+
+<span class="nc" id="L69">        btnPedidos.addActionListener(e -&gt;</span>
+<span class="nc" id="L70">                reportePedidos()</span>
+        );
+
+<span class="nc" id="L73">        btnClientes.addActionListener(e -&gt;</span>
+<span class="nc" id="L74">                reporteClientes()</span>
+        );
+<span class="nc" id="L76">    }</span>
+
+    private void reporteProductos() {
+
+<span class="nc" id="L80">        StringBuilder texto =</span>
+                new StringBuilder();
+
+<span class="nc" id="L83">        texto.append(</span>
+                &quot;TOTAL DE PRODUCTOS: &quot;
+<span class="nc" id="L85">        ).append(</span>
+<span class="nc" id="L86">                inventarioService.cantidadProductos()</span>
+<span class="nc" id="L87">        ).append(&quot;\n\n&quot;);</span>
+
+        for (Producto producto :
+<span class="nc bnc" id="L90" title="All 2 branches missed.">                inventarioService.obtenerProductos()) {</span>
+
+<span class="nc" id="L92">            texto.append(</span>
+<span class="nc" id="L93">                    producto.getCodigo()</span>
+<span class="nc" id="L94">            ).append(&quot; - &quot;)</span>
+<span class="nc" id="L95">                    .append(</span>
+<span class="nc" id="L96">                            producto.getNombre()</span>
+                    )
+<span class="nc" id="L98">                    .append(&quot; | Stock: &quot;)</span>
+<span class="nc" id="L99">                    .append(</span>
+<span class="nc" id="L100">                            producto.getStock()</span>
+                    )
+<span class="nc" id="L102">                    .append(&quot;\n&quot;);</span>
+<span class="nc" id="L103">        }</span>
+
+<span class="nc" id="L105">        mostrarReporte(</span>
+                &quot;Reporte de productos&quot;,
+<span class="nc" id="L107">                texto.toString()</span>
+        );
+<span class="nc" id="L109">    }</span>
+
+    private void reportePedidos() {
+
+<span class="nc" id="L113">        StringBuilder texto =</span>
+                new StringBuilder();
+
+<span class="nc" id="L116">        texto.append(</span>
+                &quot;TOTAL DE PEDIDOS: &quot;
+<span class="nc" id="L118">        ).append(</span>
+<span class="nc" id="L119">                pedidoService.cantidadPedidos()</span>
+<span class="nc" id="L120">        ).append(&quot;\n\n&quot;);</span>
+
+        for (Pedido pedido :
+<span class="nc bnc" id="L123" title="All 2 branches missed.">                pedidoService.listarPedidos()) {</span>
+
+<span class="nc" id="L125">            texto.append(</span>
+                    &quot;Pedido #&quot;
+<span class="nc" id="L127">            ).append(</span>
+<span class="nc" id="L128">                    pedido.getId()</span>
+<span class="nc" id="L129">            ).append(&quot; | Cliente: &quot;)</span>
+<span class="nc" id="L130">                    .append(</span>
+<span class="nc" id="L131">                            pedido.getCliente().getNombre()</span>
+                    )
+<span class="nc" id="L133">                    .append(&quot; | Estado: &quot;)</span>
+<span class="nc" id="L134">                    .append(</span>
+<span class="nc" id="L135">                            pedido.getEstado()</span>
+                    )
+<span class="nc" id="L137">                    .append(&quot; | Total: $&quot;)</span>
+<span class="nc" id="L138">                    .append(</span>
+<span class="nc" id="L139">                            pedido.calcularTotal()</span>
+                    )
+<span class="nc" id="L141">                    .append(&quot;\n&quot;);</span>
+<span class="nc" id="L142">        }</span>
+
+<span class="nc" id="L144">        texto.append(&quot;\nFACTURAS: &quot;)</span>
+<span class="nc" id="L145">                .append(facturas.size());</span>
+
+<span class="nc" id="L147">        mostrarReporte(</span>
+                &quot;Reporte de pedidos&quot;,
+<span class="nc" id="L149">                texto.toString()</span>
+        );
+<span class="nc" id="L151">    }</span>
+
+    private void reporteClientes() {
+
+<span class="nc" id="L155">        StringBuilder texto =</span>
+                new StringBuilder();
+
+<span class="nc" id="L158">        texto.append(</span>
+                &quot;TOTAL DE CLIENTES: &quot;
+<span class="nc" id="L160">        ).append(</span>
+<span class="nc" id="L161">                clienteService.cantidadClientes()</span>
+<span class="nc" id="L162">        ).append(&quot;\n\n&quot;);</span>
+
+<span class="nc" id="L164">        texto.append(</span>
+                &quot;CLIENTES ACTIVOS: &quot;
+<span class="nc" id="L166">        ).append(</span>
+                clienteService
+<span class="nc" id="L168">                        .obtenerClientesActivos()</span>
+<span class="nc" id="L169">                        .size()</span>
+<span class="nc" id="L170">        ).append(&quot;\n&quot;);</span>
+
+<span class="nc" id="L172">        texto.append(</span>
+                &quot;CLIENTES INACTIVOS: &quot;
+<span class="nc" id="L174">        ).append(</span>
+                clienteService
+<span class="nc" id="L176">                        .obtenerClientesInactivos()</span>
+<span class="nc" id="L177">                        .size()</span>
+<span class="nc" id="L178">        ).append(&quot;\n\n&quot;);</span>
+
+        for (Cliente cliente :
+<span class="nc bnc" id="L181" title="All 2 branches missed.">                clienteService.listarClientes()) {</span>
+
+<span class="nc" id="L183">            texto.append(</span>
+<span class="nc" id="L184">                    cliente.getId()</span>
+<span class="nc" id="L185">            ).append(&quot; - &quot;)</span>
+<span class="nc" id="L186">                    .append(</span>
+<span class="nc" id="L187">                            cliente.getNombre()</span>
+                    )
+<span class="nc" id="L189">                    .append(&quot; &quot;)</span>
+<span class="nc" id="L190">                    .append(</span>
+<span class="nc" id="L191">                            cliente.getApellido()</span>
+                    )
+<span class="nc" id="L193">                    .append(&quot; | &quot;)</span>
+<span class="nc" id="L194">                    .append(</span>
+<span class="nc bnc" id="L195" title="All 2 branches missed.">                            cliente.isActivo()</span>
+<span class="nc" id="L196">                                    ? &quot;Activo&quot;</span>
+<span class="nc" id="L197">                                    : &quot;Inactivo&quot;</span>
+                    )
+<span class="nc" id="L199">                    .append(&quot;\n&quot;);</span>
+<span class="nc" id="L200">        }</span>
+
+<span class="nc" id="L202">        mostrarReporte(</span>
+                &quot;Reporte de clientes&quot;,
+<span class="nc" id="L204">                texto.toString()</span>
+        );
+<span class="nc" id="L206">    }</span>
+
+    private void mostrarReporte(
+            String titulo,
+            String contenido) {
+
+<span class="nc" id="L212">        JTextArea area =</span>
+                new JTextArea(contenido);
+
+<span class="nc" id="L215">        area.setEditable(false);</span>
+
+<span class="nc" id="L217">        JScrollPane scroll =</span>
+                new JScrollPane(area);
+
+<span class="nc" id="L220">        scroll.setPreferredSize(</span>
+                new Dimension(750, 450)
+        );
+
+<span class="nc" id="L224">        JOptionPane.showMessageDialog(</span>
+                this,
+                scroll,
+                titulo,
+                JOptionPane.INFORMATION_MESSAGE
+        );
+<span class="nc" id="L230">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PanelClientes.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">SmartStore</a> &gt; <a href="index.source.html" class="el_package">com.smartstore.ui</a> &gt; <span class="el_source">PanelClientes.java</span></div><h1>PanelClientes.java</h1><pre class="source lang-java linenums">package com.smartstore.ui;
+
+import com.smartstore.model.Cliente;
+import com.smartstore.service.ClienteService;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class PanelClientes extends JPanel {
+
+    private final ClienteService clienteService;
+
+<span class="nc" id="L13">    public PanelClientes(ClienteService clienteService) {</span>
+
+<span class="nc" id="L15">        this.clienteService = clienteService;</span>
+
+<span class="nc" id="L17">        setLayout(new BorderLayout(10, 10));</span>
+
+<span class="nc" id="L19">        JLabel titulo = new JLabel(</span>
+                &quot;Gestión de Clientes&quot;,
+                SwingConstants.CENTER
+        );
+
+<span class="nc" id="L24">        titulo.setFont(</span>
+                new Font(&quot;Arial&quot;, Font.BOLD, 24)
+        );
+
+<span class="nc" id="L28">        add(titulo, BorderLayout.NORTH);</span>
+
+<span class="nc" id="L30">        JPanel botones = new JPanel(</span>
+                new FlowLayout()
+        );
+
+<span class="nc" id="L34">        JButton btnRegistrar =</span>
+                new JButton(&quot;Registrar cliente&quot;);
+
+<span class="nc" id="L37">        JButton btnBuscar =</span>
+                new JButton(&quot;Buscar cliente&quot;);
+
+<span class="nc" id="L40">        JButton btnActualizar =</span>
+                new JButton(&quot;Actualizar cliente&quot;);
+
+<span class="nc" id="L43">        JButton btnEliminar =</span>
+                new JButton(&quot;Eliminar cliente&quot;);
+
+<span class="nc" id="L46">        JButton btnListar =</span>
+                new JButton(&quot;Listar clientes&quot;);
+
+<span class="nc" id="L49">        botones.add(btnRegistrar);</span>
+<span class="nc" id="L50">        botones.add(btnBuscar);</span>
+<span class="nc" id="L51">        botones.add(btnActualizar);</span>
+<span class="nc" id="L52">        botones.add(btnEliminar);</span>
+<span class="nc" id="L53">        botones.add(btnListar);</span>
+
+<span class="nc" id="L55">        add(botones, BorderLayout.CENTER);</span>
+
+<span class="nc" id="L57">        btnRegistrar.addActionListener(e -&gt;</span>
+<span class="nc" id="L58">                registrarCliente()</span>
+        );
+
+<span class="nc" id="L61">        btnBuscar.addActionListener(e -&gt;</span>
+<span class="nc" id="L62">                buscarCliente()</span>
+        );
+
+<span class="nc" id="L65">        btnActualizar.addActionListener(e -&gt;</span>
+<span class="nc" id="L66">                actualizarCliente()</span>
+        );
+
+<span class="nc" id="L69">        btnEliminar.addActionListener(e -&gt;</span>
+<span class="nc" id="L70">                eliminarCliente()</span>
+        );
+
+<span class="nc" id="L73">        btnListar.addActionListener(e -&gt;</span>
+<span class="nc" id="L74">                listarClientes()</span>
+        );
+<span class="nc" id="L76">    }</span>
+
+    private void registrarCliente() {
+
+        try {
+
+<span class="nc" id="L82">            String idTexto = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;ID del cliente:&quot;
+            );
+
+<span class="nc bnc" id="L87" title="All 2 branches missed.">            if (idTexto == null) {</span>
+<span class="nc" id="L88">                return;</span>
+            }
+
+<span class="nc" id="L91">            int id = Integer.parseInt(idTexto);</span>
+
+<span class="nc" id="L93">            String nombre = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Nombre:&quot;
+            );
+
+<span class="nc" id="L98">            String apellido = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Apellido:&quot;
+            );
+
+<span class="nc" id="L103">            String cedula = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Cédula:&quot;
+            );
+
+<span class="nc" id="L108">            String telefono = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Teléfono:&quot;
+            );
+
+<span class="nc" id="L113">            String correo = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Correo:&quot;
+            );
+
+<span class="nc" id="L118">            String direccion = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Dirección:&quot;
+            );
+
+<span class="nc bnc" id="L123" title="All 12 branches missed.">            if (nombre == null ||</span>
+                    apellido == null ||
+                    cedula == null ||
+                    telefono == null ||
+                    correo == null ||
+                    direccion == null) {
+
+<span class="nc" id="L130">                return;</span>
+            }
+
+<span class="nc" id="L133">            Cliente cliente = new Cliente(</span>
+                    id,
+                    nombre,
+                    apellido,
+                    cedula,
+                    telefono,
+                    correo,
+                    direccion,
+                    true
+            );
+
+<span class="nc" id="L144">            clienteService.agregarCliente(cliente);</span>
+
+<span class="nc" id="L146">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Cliente registrado correctamente.&quot;
+            );
+
+<span class="nc" id="L151">        } catch (NumberFormatException ex) {</span>
+
+<span class="nc" id="L153">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;El ID debe ser un número válido.&quot;,
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+<span class="nc" id="L160">        } catch (IllegalArgumentException ex) {</span>
+
+<span class="nc" id="L162">            JOptionPane.showMessageDialog(</span>
+                    this,
+<span class="nc" id="L164">                    ex.getMessage(),</span>
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+<span class="nc" id="L168">        }</span>
+<span class="nc" id="L169">    }</span>
+
+    private void buscarCliente() {
+
+<span class="nc" id="L173">        String texto = JOptionPane.showInputDialog(</span>
+                this,
+                &quot;Ingrese el ID del cliente:&quot;
+        );
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">        if (texto == null) {</span>
+<span class="nc" id="L179">            return;</span>
+        }
+
+        try {
+
+<span class="nc" id="L184">            int id = Integer.parseInt(texto);</span>
+
+<span class="nc" id="L186">            Cliente cliente =</span>
+<span class="nc" id="L187">                    clienteService.buscarPorId(id);</span>
+
+<span class="nc bnc" id="L189" title="All 2 branches missed.">            if (cliente == null) {</span>
+
+<span class="nc" id="L191">                JOptionPane.showMessageDialog(</span>
+                        this,
+                        &quot;Cliente no encontrado.&quot;
+                );
+
+<span class="nc" id="L196">                return;</span>
+            }
+
+<span class="nc" id="L199">            JOptionPane.showMessageDialog(</span>
+                    this,
+<span class="nc" id="L201">                    cliente.toString(),</span>
+                    &quot;Cliente encontrado&quot;,
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+<span class="nc" id="L206">        } catch (NumberFormatException ex) {</span>
+
+<span class="nc" id="L208">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;ID inválido.&quot;,
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+<span class="nc" id="L214">        }</span>
+<span class="nc" id="L215">    }</span>
+
+    private void actualizarCliente() {
+
+        try {
+
+<span class="nc" id="L221">            String texto = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;ID del cliente:&quot;
+            );
+
+<span class="nc bnc" id="L226" title="All 2 branches missed.">            if (texto == null) {</span>
+<span class="nc" id="L227">                return;</span>
+            }
+
+<span class="nc" id="L230">            int id = Integer.parseInt(texto);</span>
+
+<span class="nc" id="L232">            Cliente existente =</span>
+<span class="nc" id="L233">                    clienteService.buscarPorId(id);</span>
+
+<span class="nc bnc" id="L235" title="All 2 branches missed.">            if (existente == null) {</span>
+
+<span class="nc" id="L237">                JOptionPane.showMessageDialog(</span>
+                        this,
+                        &quot;Cliente no encontrado.&quot;
+                );
+
+<span class="nc" id="L242">                return;</span>
+            }
+
+<span class="nc" id="L245">            String nombre = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Nombre:&quot;,
+<span class="nc" id="L248">                    existente.getNombre()</span>
+            );
+
+<span class="nc" id="L251">            String apellido = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Apellido:&quot;,
+<span class="nc" id="L254">                    existente.getApellido()</span>
+            );
+
+<span class="nc" id="L257">            String cedula = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Cédula:&quot;,
+<span class="nc" id="L260">                    existente.getCedula()</span>
+            );
+
+<span class="nc" id="L263">            String telefono = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Teléfono:&quot;,
+<span class="nc" id="L266">                    existente.getTelefono()</span>
+            );
+
+<span class="nc" id="L269">            String correo = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Correo:&quot;,
+<span class="nc" id="L272">                    existente.getCorreo()</span>
+            );
+
+<span class="nc" id="L275">            String direccion = JOptionPane.showInputDialog(</span>
+                    this,
+                    &quot;Dirección:&quot;,
+<span class="nc" id="L278">                    existente.getDireccion()</span>
+            );
+
+<span class="nc bnc" id="L281" title="All 12 branches missed.">            if (nombre == null ||</span>
+                    apellido == null ||
+                    cedula == null ||
+                    telefono == null ||
+                    correo == null ||
+                    direccion == null) {
+
+<span class="nc" id="L288">                return;</span>
+            }
+
+<span class="nc" id="L291">            Cliente actualizado = new Cliente(</span>
+                    id,
+                    nombre,
+                    apellido,
+                    cedula,
+                    telefono,
+                    correo,
+                    direccion,
+<span class="nc" id="L299">                    existente.isActivo()</span>
+            );
+
+<span class="nc" id="L302">            clienteService.actualizarCliente(actualizado);</span>
+
+<span class="nc" id="L304">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;Cliente actualizado correctamente.&quot;
+            );
+
+<span class="nc" id="L309">        } catch (NumberFormatException ex) {</span>
+
+<span class="nc" id="L311">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;ID inválido.&quot;,
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+
+<span class="nc" id="L318">        } catch (Exception ex) {</span>
+
+<span class="nc" id="L320">            JOptionPane.showMessageDialog(</span>
+                    this,
+<span class="nc" id="L322">                    ex.getMessage(),</span>
+                    &quot;Error&quot;,
+                    JOptionPane.ERROR_MESSAGE
+            );
+<span class="nc" id="L326">        }</span>
+<span class="nc" id="L327">    }</span>
+
+    private void eliminarCliente() {
+
+<span class="nc" id="L331">        String texto = JOptionPane.showInputDialog(</span>
+                this,
+                &quot;ID del cliente:&quot;
+        );
+
+<span class="nc bnc" id="L336" title="All 2 branches missed.">        if (texto == null) {</span>
+<span class="nc" id="L337">            return;</span>
+        }
+
+        try {
+
+<span class="nc" id="L342">            int id = Integer.parseInt(texto);</span>
+
+<span class="nc" id="L344">            boolean eliminado =</span>
+<span class="nc" id="L345">                    clienteService.eliminarCliente(id);</span>
+
+<span class="nc bnc" id="L347" title="All 2 branches missed.">            if (eliminado) {</span>
+
+<span class="nc" id="L349">                JOptionPane.showMessageDialog(</span>
+                        this,
+                        &quot;Cliente eliminado correctamente.&quot;
+                );
+
+            } else {
+
+<span class="nc" id="L356">                JOptionPane.showMessageDialog(</span>
+                        this,
+                        &quot;Cliente no encontrado.&quot;
+                );
+            }
+
+<span class="nc" id="L362">        } catch (NumberFormatException ex) {</span>
+
+<span class="nc" id="L364">            JOptionPane.showMessageDialog(</span>
+                    this,
+                    &quot;ID inválido.&quot;
+            );
+<span class="nc" id="L368">        }</span>
+<span class="nc" id="L369">    }</span>
+
+    private void listarClientes() {
+
+<span class="nc" id="L373">        StringBuilder texto =</span>
+                new StringBuilder();
+
+        for (Cliente cliente :
+<span class="nc bnc" id="L377" title="All 2 branches missed.">                clienteService.listarClientes()) {</span>
+
+<span class="nc" id="L379">            texto.append(cliente)</span>
+<span class="nc" id="L380">                    .append(&quot;\n\n&quot;);</span>
+<span class="nc" id="L381">        }</span>
+
+<span class="nc bnc" id="L383" title="All 2 branches missed.">        if (texto.length() == 0) {</span>
+<span class="nc" id="L384">            texto.append(&quot;No hay clientes registrados.&quot;);</span>
+        }
+
+<span class="nc" id="L387">        JTextArea area =</span>
+<span class="nc" id="L388">                new JTextArea(texto.toString());</span>
+
+<span class="nc" id="L390">        area.setEditable(false);</span>
+
+<span class="nc" id="L392">        JScrollPane scroll =</span>
+                new JScrollPane(area);
+
+<span class="nc" id="L395">        scroll.setPreferredSize(</span>
+                new Dimension(700, 400)
+        );
+
+<span class="nc" id="L399">        JOptionPane.showMessageDialog(</span>
+                this,
+                scroll,
+                &quot;Clientes&quot;,
+                JOptionPane.INFORMATION_MESSAGE
+        );
+<span class="nc" id="L405">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.12.202403310830</span></div></body></html>
