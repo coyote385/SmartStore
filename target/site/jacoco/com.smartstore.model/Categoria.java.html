@@ -63,11 +63,11 @@ public class Categoria {
     }
 
     public void setId(int id) {
-<span class="nc bnc" id="L66" title="All 2 branches missed.">        if (id &lt;= 0) {</span>
-<span class="nc" id="L67">            throw new IllegalArgumentException(&quot;El ID debe ser mayor que cero.&quot;);</span>
+<span class="fc bfc" id="L66" title="All 2 branches covered.">        if (id &lt;= 0) {</span>
+<span class="fc" id="L67">            throw new IllegalArgumentException(&quot;El ID debe ser mayor que cero.&quot;);</span>
         }
-<span class="nc" id="L69">        this.id = id;</span>
-<span class="nc" id="L70">    }</span>
+<span class="fc" id="L69">        this.id = id;</span>
+<span class="fc" id="L70">    }</span>
 
     public String getNombre() {
 <span class="fc" id="L73">        return nombre;</span>
@@ -75,7 +75,7 @@ public class Categoria {
 
     public void setNombre(String nombre) {
 
-<span class="pc bpc" id="L78" title="1 of 4 branches missed.">        if (nombre == null || nombre.trim().isEmpty()) {</span>
+<span class="fc bfc" id="L78" title="All 4 branches covered.">        if (nombre == null || nombre.trim().isEmpty()) {</span>
 <span class="fc" id="L79">            throw new IllegalArgumentException(&quot;El nombre no puede estar vacío.&quot;);</span>
         }
 
@@ -88,7 +88,7 @@ public class Categoria {
 
     public void setDescripcion(String descripcion) {
 
-<span class="pc bpc" id="L91" title="1 of 4 branches missed.">        if (descripcion == null || descripcion.trim().isEmpty()) {</span>
+<span class="fc bfc" id="L91" title="All 4 branches covered.">        if (descripcion == null || descripcion.trim().isEmpty()) {</span>
 <span class="fc" id="L92">            throw new IllegalArgumentException(&quot;La descripción no puede estar vacía.&quot;);</span>
         }
 
@@ -112,12 +112,12 @@ public class Categoria {
 <span class="fc bfc" id="L112" title="All 2 branches covered.">        if (this == o)</span>
 <span class="fc" id="L113">            return true;</span>
 
-<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (!(o instanceof Categoria))</span>
-<span class="nc" id="L116">            return false;</span>
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (!(o instanceof Categoria))</span>
+<span class="fc" id="L116">            return false;</span>
 
 <span class="fc" id="L118">        Categoria that = (Categoria) o;</span>
 
-<span class="pc bpc" id="L120" title="1 of 2 branches missed.">        return id == that.id;</span>
+<span class="fc bfc" id="L120" title="All 2 branches covered.">        return id == that.id;</span>
     }
 
     @Override

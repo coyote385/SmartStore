@@ -31,22 +31,24 @@ public class Cliente implements Serializable {
      * @param direccion Dirección de residencia.
      * @param activo Estado del cliente.
      */
-    public Cliente(int id,
-                   String nombre,
-                   String apellido,
-                   String cedula,
-                   String telefono,
-                   String correo,
-                   String direccion,
-                   boolean activo) {
+    public Cliente(
+            int id,
+            String nombre,
+            String apellido,
+            String cedula,
+            String telefono,
+            String correo,
+            String direccion,
+            boolean activo) {
 
-        this.id = id;
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.cedula = cedula;
-        this.telefono = telefono;
-        this.correo = correo;
-        this.direccion = direccion;
+        setId(id);
+        setNombre(nombre);
+        setApellido(apellido);
+        setCedula(cedula);
+        setTelefono(telefono);
+        setCorreo(correo);
+        setDireccion(direccion);
+
         this.activo = activo;
     }
 
@@ -57,7 +59,9 @@ public class Cliente implements Serializable {
     public void setId(int id) {
 
         if (id <= 0) {
-            throw new IllegalArgumentException("El ID debe ser mayor que cero.");
+            throw new IllegalArgumentException(
+                    "El ID debe ser mayor que cero."
+            );
         }
 
         this.id = id;
@@ -70,7 +74,9 @@ public class Cliente implements Serializable {
     public void setNombre(String nombre) {
 
         if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El nombre es obligatorio."
+            );
         }
 
         this.nombre = nombre;
@@ -83,7 +89,9 @@ public class Cliente implements Serializable {
     public void setApellido(String apellido) {
 
         if (apellido == null || apellido.isBlank()) {
-            throw new IllegalArgumentException("El apellido es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El apellido es obligatorio."
+            );
         }
 
         this.apellido = apellido;
@@ -96,7 +104,9 @@ public class Cliente implements Serializable {
     public void setCedula(String cedula) {
 
         if (cedula == null || cedula.isBlank()) {
-            throw new IllegalArgumentException("La cédula es obligatoria.");
+            throw new IllegalArgumentException(
+                    "La cédula es obligatoria."
+            );
         }
 
         this.cedula = cedula;
@@ -109,7 +119,9 @@ public class Cliente implements Serializable {
     public void setTelefono(String telefono) {
 
         if (telefono == null || telefono.isBlank()) {
-            throw new IllegalArgumentException("El teléfono es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El teléfono es obligatorio."
+            );
         }
 
         this.telefono = telefono;
@@ -122,7 +134,9 @@ public class Cliente implements Serializable {
     public void setCorreo(String correo) {
 
         if (correo == null || correo.isBlank()) {
-            throw new IllegalArgumentException("El correo es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El correo es obligatorio."
+            );
         }
 
         this.correo = correo;
@@ -135,7 +149,9 @@ public class Cliente implements Serializable {
     public void setDireccion(String direccion) {
 
         if (direccion == null || direccion.isBlank()) {
-            throw new IllegalArgumentException("La dirección es obligatoria.");
+            throw new IllegalArgumentException(
+                    "La dirección es obligatoria."
+            );
         }
 
         this.direccion = direccion;
@@ -163,5 +179,4 @@ public class Cliente implements Serializable {
                 ", activo=" + activo +
                 '}';
     }
-
 }

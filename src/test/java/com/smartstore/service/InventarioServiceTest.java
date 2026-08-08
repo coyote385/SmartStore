@@ -1,6 +1,10 @@
 package com.smartstore.service;
 
-import com.smartstore.model.*;
+import com.smartstore.exceptions.CodigoDuplicadoException;
+import com.smartstore.exceptions.ProductoNoEncontradoException;
+import com.smartstore.model.Categoria;
+import com.smartstore.model.Producto;
+import com.smartstore.model.Proveedor;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,12 +13,16 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Pruebas unitarias para InventarioService.
+ *
+ * @author Jonathan Mendez
+ * @version 1.0
+ */
 public class InventarioServiceTest {
 
     private InventarioService inventario;
-
     private Categoria categoria;
-
     private Proveedor proveedor;
 
     @BeforeEach
@@ -26,7 +34,8 @@ public class InventarioServiceTest {
                 1,
                 "Tecnología",
                 "Equipos",
-                true);
+                true
+        );
 
         proveedor = new Proveedor(
                 1,
@@ -35,94 +44,289 @@ public class InventarioServiceTest {
                 "300",
                 "hp@hp.com",
                 "Bogotá",
-                true);
-
+                true
+        );
     }
 
-    @Test
-    void registrarProducto() {
+    private Producto crearProducto(String codigo) {
 
-        Producto p = new Producto(
-                "P001",
+        return new Producto(
+                codigo,
                 "Mouse",
                 "USB",
                 50000,
                 10,
                 2,
                 categoria,
-                proveedor);
-
-        inventario.registrarProducto(p);
-
-        assertEquals(1,
-                inventario.cantidadProductos());
-
+                proveedor
+        );
     }
 
     @Test
-    void noPermitirCodigoDuplicado() {
+    void inventarioDebeIniciarVacio() {
 
-        Producto p1 = new Producto(
-                "P001","Mouse","USB",1,1,1,categoria,proveedor);
+        assertEquals(
+                0,
+                inventario.cantidadProductos()
+        );
 
-        Producto p2 = new Producto(
-                "P001","Teclado","USB",1,1,1,categoria,proveedor);
+        assertTrue(
+                inventario.obtenerProductos().isEmpty()
+        );
+    }
+
+    @Test
+    void registrarProductoCorrectamente()
+            throws CodigoDuplicadoException {
+
+        Producto producto =
+                crearProducto("P001");
+
+        inventario.registrarProducto(producto);
+
+        assertEquals(
+                1,
+                inventario.cantidadProductos()
+        );
+    }
+
+    @Test
+    void productoNuloDebeLanzarExcepcion() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> inventario.registrarProducto(null)
+        );
+    }
+
+    @Test
+    void noPermitirCodigoDuplicado()
+            throws CodigoDuplicadoException {
+
+        Producto p1 =
+                crearProducto("P001");
+
+        Producto p2 =
+                new Producto(
+                        "P001",
+                        "Teclado",
+                        "USB",
+                        50000,
+                        10,
+                        2,
+                        categoria,
+                        proveedor
+                );
 
         inventario.registrarProducto(p1);
 
         assertThrows(
-                IllegalArgumentException.class,
-                () -> inventario.registrarProducto(p2));
-
+                CodigoDuplicadoException.class,
+                () -> inventario.registrarProducto(p2)
+        );
     }
 
     @Test
-    void buscarProductoPorCodigo() {
+    void buscarProductoPorCodigo()
+            throws CodigoDuplicadoException {
 
-        Producto p = new Producto(
-                "P001","Mouse","USB",1,1,1,categoria,proveedor);
+        Producto producto =
+                crearProducto("P001");
 
-        inventario.registrarProducto(p);
+        inventario.registrarProducto(producto);
+
+        Producto resultado =
+                inventario.buscarPorCodigo("P001");
+
+        assertNotNull(resultado);
+
+        assertEquals(
+                "P001",
+                resultado.getCodigo()
+        );
+    }
+
+    @Test
+    void buscarProductoPorCodigoIgnoraMayusculas()
+            throws CodigoDuplicadoException {
+
+        Producto producto =
+                crearProducto("P001");
+
+        inventario.registrarProducto(producto);
 
         assertNotNull(
-                inventario.buscarPorCodigo("P001"));
-
+                inventario.buscarPorCodigo("p001")
+        );
     }
 
     @Test
-    void eliminarProducto() {
+    void buscarProductoInexistente() {
 
-        Producto p = new Producto(
-                "P001","Mouse","USB",1,1,1,categoria,proveedor);
-
-        inventario.registrarProducto(p);
-
-        assertTrue(
-                inventario.eliminarProducto("P001"));
-
+        assertNull(
+                inventario.buscarPorCodigo("P999")
+        );
     }
 
     @Test
-    void buscarPorNombre() {
+    void buscarCodigoNulo() {
+
+        assertNull(
+                inventario.buscarPorCodigo(null)
+        );
+    }
+
+    @Test
+    void buscarCodigoVacio() {
+
+        assertNull(
+                inventario.buscarPorCodigo("")
+        );
+    }
+
+    @Test
+    void buscarPorNombre()
+            throws CodigoDuplicadoException {
 
         inventario.registrarProducto(
-
                 new Producto(
                         "P001",
                         "Mouse Gamer",
                         "USB",
-                        1,
-                        1,
-                        1,
+                        50000,
+                        10,
+                        2,
                         categoria,
-                        proveedor));
+                        proveedor
+                )
+        );
 
-        List<Producto> lista =
+        List<Producto> resultado =
                 inventario.buscarPorNombre("mouse");
 
-        assertEquals(1,
-                lista.size());
-
+        assertEquals(
+                1,
+                resultado.size()
+        );
     }
 
+    @Test
+    void buscarPorNombreIgnoraMayusculas()
+            throws CodigoDuplicadoException {
+
+        inventario.registrarProducto(
+                crearProducto("P001")
+        );
+
+        List<Producto> resultado =
+                inventario.buscarPorNombre("MOUSE");
+
+        assertEquals(
+                1,
+                resultado.size()
+        );
+    }
+
+    @Test
+    void buscarPorNombreInexistente()
+            throws CodigoDuplicadoException {
+
+        inventario.registrarProducto(
+                crearProducto("P001")
+        );
+
+        List<Producto> resultado =
+                inventario.buscarPorNombre("Laptop");
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void buscarPorNombreNulo() {
+
+        List<Producto> resultado =
+                inventario.buscarPorNombre(null);
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void buscarPorNombreVacio() {
+
+        List<Producto> resultado =
+                inventario.buscarPorNombre("");
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void eliminarProducto()
+            throws CodigoDuplicadoException,
+            ProductoNoEncontradoException {
+
+        Producto producto =
+                crearProducto("P001");
+
+        inventario.registrarProducto(producto);
+
+        assertTrue(
+                inventario.eliminarProducto("P001")
+        );
+
+        assertEquals(
+                0,
+                inventario.cantidadProductos()
+        );
+    }
+
+    @Test
+    void eliminarProductoInexistente() {
+
+        assertThrows(
+                ProductoNoEncontradoException.class,
+                () -> inventario.eliminarProducto("P999")
+        );
+    }
+
+    @Test
+    void obtenerProductosDevuelveCopia()
+            throws CodigoDuplicadoException {
+
+        inventario.registrarProducto(
+                crearProducto("P001")
+        );
+
+        List<Producto> productos =
+                inventario.obtenerProductos();
+
+        productos.clear();
+
+        assertEquals(
+                1,
+                inventario.cantidadProductos()
+        );
+    }
+
+    @Test
+    void cantidadProductos()
+            throws CodigoDuplicadoException {
+
+        assertEquals(
+                0,
+                inventario.cantidadProductos()
+        );
+
+        inventario.registrarProducto(
+                crearProducto("P001")
+        );
+
+        inventario.registrarProducto(
+                crearProducto("P002")
+        );
+
+        assertEquals(
+                2,
+                inventario.cantidadProductos()
+        );
+    }
 }

@@ -33,17 +33,17 @@ public class DetallePedido implements Serializable {
 <span class="fc" id="L33">    }</span>
 
     public Producto getProducto() {
-<span class="nc" id="L36">        return producto;</span>
+<span class="fc" id="L36">        return producto;</span>
     }
 
     public void setProducto(Producto producto) {
 
-<span class="nc bnc" id="L41" title="All 2 branches missed.">        if (producto == null) {</span>
-<span class="nc" id="L42">            throw new IllegalArgumentException(&quot;El producto no puede ser nulo.&quot;);</span>
+<span class="fc bfc" id="L41" title="All 2 branches covered.">        if (producto == null) {</span>
+<span class="fc" id="L42">            throw new IllegalArgumentException(&quot;El producto no puede ser nulo.&quot;);</span>
         }
 
-<span class="nc" id="L45">        this.producto = producto;</span>
-<span class="nc" id="L46">    }</span>
+<span class="fc" id="L45">        this.producto = producto;</span>
+<span class="fc" id="L46">    }</span>
 
     public int getCantidad() {
 <span class="fc" id="L49">        return cantidad;</span>
@@ -59,17 +59,17 @@ public class DetallePedido implements Serializable {
 <span class="fc" id="L59">    }</span>
 
     public double getPrecioUnitario() {
-<span class="nc" id="L62">        return precioUnitario;</span>
+<span class="fc" id="L62">        return precioUnitario;</span>
     }
 
     public void setPrecioUnitario(double precioUnitario) {
 
-<span class="pc bpc" id="L67" title="1 of 2 branches missed.">        if (precioUnitario &lt;= 0) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (precioUnitario &lt;= 0) {</span>
 <span class="fc" id="L68">            throw new IllegalArgumentException(&quot;El precio debe ser mayor que cero.&quot;);</span>
         }
 
-<span class="nc" id="L71">        this.precioUnitario = precioUnitario;</span>
-<span class="nc" id="L72">    }</span>
+<span class="fc" id="L71">        this.precioUnitario = precioUnitario;</span>
+<span class="fc" id="L72">    }</span>
 
     /**
      * Calcula el subtotal del detalle.
@@ -85,11 +85,11 @@ public class DetallePedido implements Serializable {
     @Override
     public String toString() {
 
-<span class="nc" id="L88">        return &quot;DetallePedido{&quot; +</span>
-<span class="nc" id="L89">                &quot;producto=&quot; + producto.getNombre() +</span>
+<span class="fc" id="L88">        return &quot;DetallePedido{&quot; +</span>
+<span class="fc" id="L89">                &quot;producto=&quot; + producto.getNombre() +</span>
                 &quot;, cantidad=&quot; + cantidad +
                 &quot;, precioUnitario=&quot; + precioUnitario +
-<span class="nc" id="L92">                &quot;, subtotal=&quot; + calcularSubtotal() +</span>
+<span class="fc" id="L92">                &quot;, subtotal=&quot; + calcularSubtotal() +</span>
                 '}';
 
     }

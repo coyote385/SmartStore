@@ -25,8 +25,8 @@ public class Factura implements Serializable {
      */
 <span class="fc" id="L26">    public Factura(int numero, Pedido pedido, double iva) {</span>
 
-<span class="pc bpc" id="L28" title="1 of 2 branches missed.">        if (pedido == null) {</span>
-<span class="nc" id="L29">            throw new IllegalArgumentException(&quot;El pedido es obligatorio.&quot;);</span>
+<span class="fc bfc" id="L28" title="All 2 branches covered.">        if (pedido == null) {</span>
+<span class="fc" id="L29">            throw new IllegalArgumentException(&quot;El pedido es obligatorio.&quot;);</span>
         }
 
 <span class="fc bfc" id="L32" title="All 2 branches covered.">        if (iva &lt; 0) {</span>
@@ -45,11 +45,11 @@ public class Factura implements Serializable {
     }
 
     public Pedido getPedido() {
-<span class="nc" id="L48">        return pedido;</span>
+<span class="fc" id="L48">        return pedido;</span>
     }
 
     public LocalDate getFecha() {
-<span class="nc" id="L52">        return fecha;</span>
+<span class="fc" id="L52">        return fecha;</span>
     }
 
     public double getIva() {
@@ -58,8 +58,8 @@ public class Factura implements Serializable {
 
     public void setIva(double iva) {
 
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        if (iva &lt; 0) {</span>
-<span class="nc" id="L62">            throw new IllegalArgumentException(&quot;El IVA no puede ser negativo.&quot;);</span>
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (iva &lt; 0) {</span>
+<span class="fc" id="L62">            throw new IllegalArgumentException(&quot;El IVA no puede ser negativo.&quot;);</span>
         }
 
 <span class="fc" id="L65">        this.iva = iva;</span>
@@ -91,10 +91,10 @@ public class Factura implements Serializable {
     @Override
     public String toString() {
 
-<span class="nc" id="L94">        return &quot;Factura{&quot; +</span>
+<span class="fc" id="L94">        return &quot;Factura{&quot; +</span>
                 &quot;numero=&quot; + numero +
                 &quot;, fecha=&quot; + fecha +
-<span class="nc" id="L97">                &quot;, total=&quot; + calcularTotal() +</span>
+<span class="fc" id="L97">                &quot;, total=&quot; + calcularTotal() +</span>
                 '}';
 
     }

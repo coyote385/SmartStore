@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.smartstore.service.ClienteServiceTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.155 s -- in com.smartstore.service.ClienteServiceTest
+Tests run: 21, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.306 s -- in com.smartstore.service.ClienteServiceTest

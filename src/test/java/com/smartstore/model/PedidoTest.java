@@ -23,13 +23,15 @@ public class PedidoTest {
                 "300",
                 "correo@mail.com",
                 "Ibagué",
-                true);
+                true
+        );
 
         categoria = new Categoria(
                 1,
                 "Tecnología",
                 "Periféricos",
-                true);
+                true
+        );
 
         proveedor = new Proveedor(
                 1,
@@ -38,7 +40,8 @@ public class PedidoTest {
                 "300",
                 "correo@mail.com",
                 "Bogotá",
-                true);
+                true
+        );
 
         producto = new Producto(
                 "P001",
@@ -48,80 +51,278 @@ public class PedidoTest {
                 20,
                 5,
                 categoria,
-                proveedor);
-
+                proveedor
+        );
     }
 
     @Test
-    void crearPedido() {
+    void crearPedidoCorrectamente() {
 
         Pedido pedido =
-                new Pedido(1, cliente, "Pendiente");
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
 
-        assertEquals(cliente, pedido.getCliente());
+        assertEquals(
+                1,
+                pedido.getId()
+        );
 
+        assertEquals(
+                cliente,
+                pedido.getCliente()
+        );
+
+        assertEquals(
+                "Pendiente",
+                pedido.getEstado()
+        );
+
+        assertNotNull(
+                pedido.getFecha()
+        );
+
+        assertNotNull(
+                pedido.getDetalles()
+        );
+
+        assertTrue(
+                pedido.getDetalles().isEmpty()
+        );
     }
 
     @Test
     void agregarDetalle() {
 
         Pedido pedido =
-                new Pedido(1, cliente, "Pendiente");
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
 
-        pedido.agregarDetalle(
-                new DetallePedido(producto,2,80000));
+        DetallePedido detalle =
+                new DetallePedido(
+                        producto,
+                        2,
+                        80000
+                );
 
-        assertEquals(1,
-                pedido.cantidadProductos());
+        pedido.agregarDetalle(detalle);
 
+        assertEquals(
+                1,
+                pedido.cantidadProductos()
+        );
+
+        assertEquals(
+                detalle,
+                pedido.getDetalles().get(0)
+        );
+    }
+
+    @Test
+    void detalleNuloDebeLanzarExcepcion() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> pedido.agregarDetalle(null)
+        );
+    }
+
+    @Test
+    void calcularTotalSinDetalles() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        assertEquals(
+                0,
+                pedido.calcularTotal()
+        );
     }
 
     @Test
     void calcularTotal() {
 
         Pedido pedido =
-                new Pedido(1, cliente, "Pendiente");
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
 
         pedido.agregarDetalle(
-                new DetallePedido(producto,2,80000));
+                new DetallePedido(
+                        producto,
+                        2,
+                        80000
+                )
+        );
 
         pedido.agregarDetalle(
-                new DetallePedido(producto,1,80000));
+                new DetallePedido(
+                        producto,
+                        1,
+                        80000
+                )
+        );
 
         assertEquals(
                 240000,
-                pedido.calcularTotal());
-
+                pedido.calcularTotal()
+        );
     }
 
     @Test
-    void eliminarDetalle() {
+    void eliminarDetalleExistente() {
 
         Pedido pedido =
-                new Pedido(1, cliente, "Pendiente");
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
 
         DetallePedido detalle =
-                new DetallePedido(producto,1,80000);
+                new DetallePedido(
+                        producto,
+                        1,
+                        80000
+                );
 
         pedido.agregarDetalle(detalle);
 
         assertTrue(
-                pedido.eliminarDetalle(detalle));
+                pedido.eliminarDetalle(detalle)
+        );
 
+        assertEquals(
+                0,
+                pedido.cantidadProductos()
+        );
+    }
+
+    @Test
+    void eliminarDetalleInexistente() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        DetallePedido detalle =
+                new DetallePedido(
+                        producto,
+                        1,
+                        80000
+                );
+
+        assertFalse(
+                pedido.eliminarDetalle(detalle)
+        );
     }
 
     @Test
     void cambiarEstado() {
 
         Pedido pedido =
-                new Pedido(1, cliente, "Pendiente");
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
 
         pedido.setEstado("Facturado");
 
         assertEquals(
                 "Facturado",
-                pedido.getEstado());
-
+                pedido.getEstado()
+        );
     }
 
+    @Test
+    void estadoNuloDebeLanzarExcepcion() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> pedido.setEstado(null)
+        );
+    }
+
+    @Test
+    void estadoVacioDebeLanzarExcepcion() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> pedido.setEstado("")
+        );
+    }
+
+    @Test
+    void verificarToString() {
+
+        Pedido pedido =
+                new Pedido(
+                        1,
+                        cliente,
+                        "Pendiente"
+                );
+
+        pedido.agregarDetalle(
+                new DetallePedido(
+                        producto,
+                        2,
+                        80000
+                )
+        );
+
+        String resultado =
+                pedido.toString();
+
+        assertTrue(
+                resultado.contains("1")
+        );
+
+        assertTrue(
+                resultado.contains("Jonathan")
+        );
+
+        assertTrue(
+                resultado.contains("Pendiente")
+        );
+
+        assertTrue(
+                resultado.contains("160000")
+        );
+    }
 }

@@ -47,7 +47,7 @@ public class Pedido implements Serializable {
     }
 
     public LocalDate getFecha() {
-<span class="nc" id="L50">        return fecha;</span>
+<span class="fc" id="L50">        return fecha;</span>
     }
 
     public String getEstado() {
@@ -56,8 +56,8 @@ public class Pedido implements Serializable {
 
     public void setEstado(String estado) {
 
-<span class="pc bpc" id="L59" title="2 of 4 branches missed.">        if (estado == null || estado.isBlank()) {</span>
-<span class="nc" id="L60">            throw new IllegalArgumentException(&quot;El estado es obligatorio.&quot;);</span>
+<span class="fc bfc" id="L59" title="All 4 branches covered.">        if (estado == null || estado.isBlank()) {</span>
+<span class="fc" id="L60">            throw new IllegalArgumentException(&quot;El estado es obligatorio.&quot;);</span>
         }
 
 <span class="fc" id="L63">        this.estado = estado;</span>
@@ -65,7 +65,7 @@ public class Pedido implements Serializable {
 <span class="fc" id="L65">    }</span>
 
     public List&lt;DetallePedido&gt; getDetalles() {
-<span class="nc" id="L68">        return detalles;</span>
+<span class="fc" id="L68">        return detalles;</span>
     }
 
     /**
@@ -73,8 +73,8 @@ public class Pedido implements Serializable {
      */
     public void agregarDetalle(DetallePedido detalle) {
 
-<span class="pc bpc" id="L76" title="1 of 2 branches missed.">        if (detalle == null) {</span>
-<span class="nc" id="L77">            throw new IllegalArgumentException(&quot;El detalle no puede ser nulo.&quot;);</span>
+<span class="fc bfc" id="L76" title="All 2 branches covered.">        if (detalle == null) {</span>
+<span class="fc" id="L77">            throw new IllegalArgumentException(&quot;El detalle no puede ser nulo.&quot;);</span>
         }
 
 <span class="fc" id="L80">        detalles.add(detalle);</span>
@@ -119,12 +119,12 @@ public class Pedido implements Serializable {
     @Override
     public String toString() {
 
-<span class="nc" id="L122">        return &quot;Pedido{&quot; +</span>
+<span class="fc" id="L122">        return &quot;Pedido{&quot; +</span>
                 &quot;id=&quot; + id +
-<span class="nc" id="L124">                &quot;, cliente=&quot; + cliente.getNombre() +</span>
+<span class="fc" id="L124">                &quot;, cliente=&quot; + cliente.getNombre() +</span>
                 &quot;, fecha=&quot; + fecha +
                 &quot;, estado='&quot; + estado + '\'' +
-<span class="nc" id="L127">                &quot;, total=&quot; + calcularTotal() +</span>
+<span class="fc" id="L127">                &quot;, total=&quot; + calcularTotal() +</span>
                 '}';
 
     }

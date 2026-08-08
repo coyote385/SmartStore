@@ -3,6 +3,8 @@ package com.smartstore.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FacturaTest {
@@ -20,13 +22,15 @@ public class FacturaTest {
                 "300",
                 "correo@mail.com",
                 "Ibagué",
-                true);
+                true
+        );
 
         Categoria categoria = new Categoria(
                 1,
                 "Tecnología",
                 "Periféricos",
-                true);
+                true
+        );
 
         Proveedor proveedor = new Proveedor(
                 1,
@@ -35,7 +39,8 @@ public class FacturaTest {
                 "300",
                 "correo@mail.com",
                 "Bogotá",
-                true);
+                true
+        );
 
         Producto producto = new Producto(
                 "P001",
@@ -45,72 +50,63 @@ public class FacturaTest {
                 10,
                 2,
                 categoria,
-                proveedor);
+                proveedor
+        );
 
-        pedido = new Pedido(1, cliente, "Pendiente");
+        pedido = new Pedido(
+                1,
+                cliente,
+                "Pendiente"
+        );
 
         pedido.agregarDetalle(
                 new DetallePedido(
                         producto,
                         2,
-                        100000));
-
+                        100000
+                )
+        );
     }
 
     @Test
-    void crearFactura() {
+    void crearFacturaCorrectamente() {
 
         Factura factura = new Factura(
                 1,
                 pedido,
-                0.19);
-
-        assertEquals(1, factura.getNumero());
-
-    }
-
-    @Test
-    void calcularIVA() {
-
-        Factura factura = new Factura(
-                1,
-                pedido,
-                0.19);
+                0.19
+        );
 
         assertEquals(
-                38000,
-                factura.calcularIVA());
+                1,
+                factura.getNumero()
+        );
 
+        assertEquals(
+                pedido,
+                factura.getPedido()
+        );
+
+        assertEquals(
+                0.19,
+                factura.getIva()
+        );
+
+        assertNotNull(factura.getFecha());
+        assertEquals(LocalDate.now(), factura.getFecha());
     }
 
     @Test
-    void calcularTotal() {
+    void pedidoNuloDebeLanzarExcepcion() {
 
-        Factura factura = new Factura(
-                1,
-                pedido,
-                0.19);
-
-        assertEquals(
-                238000,
-                factura.calcularTotal());
-
-    }
-
-    @Test
-    void modificarIVA() {
-
-        Factura factura = new Factura(
-                1,
-                pedido,
-                0.19);
-
-        factura.setIva(0.10);
-
-        assertEquals(
-                0.10,
-                factura.getIva());
-
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> new Factura(
+                        1,
+                        null,
+                        0.19
+                )
+        );
     }
 
     @Test
@@ -121,8 +117,85 @@ public class FacturaTest {
                 () -> new Factura(
                         1,
                         pedido,
-                        -0.10));
-
+                        -0.10
+                )
+        );
     }
 
+    @Test
+    void calcularIVA() {
+
+        Factura factura = new Factura(
+                1,
+                pedido,
+                0.19
+        );
+
+        assertEquals(
+                38000,
+                factura.calcularIVA()
+        );
+    }
+
+    @Test
+    void calcularTotal() {
+
+        Factura factura = new Factura(
+                1,
+                pedido,
+                0.19
+        );
+
+        assertEquals(
+                238000,
+                factura.calcularTotal()
+        );
+    }
+
+    @Test
+    void modificarIVA() {
+
+        Factura factura = new Factura(
+                1,
+                pedido,
+                0.19
+        );
+
+        factura.setIva(0.10);
+
+        assertEquals(
+                0.10,
+                factura.getIva()
+        );
+    }
+
+    @Test
+    void modificarIVANegativoDebeLanzarExcepcion() {
+
+        Factura factura = new Factura(
+                1,
+                pedido,
+                0.19
+        );
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> factura.setIva(-0.10)
+        );
+    }
+
+    @Test
+    void verificarToString() {
+
+        Factura factura = new Factura(
+                1,
+                pedido,
+                0.19
+        );
+
+        String resultado = factura.toString();
+
+        assertTrue(resultado.contains("1"));
+        assertTrue(resultado.contains("238000"));
+    }
 }

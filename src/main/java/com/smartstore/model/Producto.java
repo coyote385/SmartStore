@@ -27,14 +27,15 @@ public class Producto {
     /**
      * Constructor completo.
      */
-    public Producto(String codigo,
-                    String nombre,
-                    String descripcion,
-                    double precio,
-                    int stock,
-                    int stockMinimo,
-                    Categoria categoria,
-                    Proveedor proveedor) {
+    public Producto(
+            String codigo,
+            String nombre,
+            String descripcion,
+            double precio,
+            int stock,
+            int stockMinimo,
+            Categoria categoria,
+            Proveedor proveedor) {
 
         setCodigo(codigo);
         setNombre(nombre);
@@ -44,20 +45,24 @@ public class Producto {
         setStockMinimo(stockMinimo);
 
         if (categoria == null) {
-            throw new IllegalArgumentException("La categoría es obligatoria.");
+            throw new IllegalArgumentException(
+                    "La categoría es obligatoria."
+            );
         }
 
         if (proveedor == null) {
-            throw new IllegalArgumentException("El proveedor es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El proveedor es obligatorio."
+            );
         }
 
         this.categoria = categoria;
         this.proveedor = proveedor;
     }
 
-    //=========================
+    // =========================
     // Getters y Setters
-    //=========================
+    // =========================
 
     public String getCodigo() {
         return codigo;
@@ -66,7 +71,9 @@ public class Producto {
     public void setCodigo(String codigo) {
 
         if (codigo == null || codigo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El código es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El código es obligatorio."
+            );
         }
 
         this.codigo = codigo;
@@ -79,7 +86,9 @@ public class Producto {
     public void setNombre(String nombre) {
 
         if (nombre == null || nombre.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El nombre es obligatorio."
+            );
         }
 
         this.nombre = nombre;
@@ -92,7 +101,9 @@ public class Producto {
     public void setDescripcion(String descripcion) {
 
         if (descripcion == null || descripcion.trim().isEmpty()) {
-            throw new IllegalArgumentException("La descripción es obligatoria.");
+            throw new IllegalArgumentException(
+                    "La descripción es obligatoria."
+            );
         }
 
         this.descripcion = descripcion;
@@ -105,7 +116,9 @@ public class Producto {
     public void setPrecio(double precio) {
 
         if (precio <= 0) {
-            throw new IllegalArgumentException("El precio debe ser mayor que cero.");
+            throw new IllegalArgumentException(
+                    "El precio debe ser mayor que cero."
+            );
         }
 
         this.precio = precio;
@@ -118,7 +131,9 @@ public class Producto {
     public void setStock(int stock) {
 
         if (stock < 0) {
-            throw new IllegalArgumentException("El stock no puede ser negativo.");
+            throw new IllegalArgumentException(
+                    "El stock no puede ser negativo."
+            );
         }
 
         this.stock = stock;
@@ -131,7 +146,9 @@ public class Producto {
     public void setStockMinimo(int stockMinimo) {
 
         if (stockMinimo < 0) {
-            throw new IllegalArgumentException("El stock mínimo no puede ser negativo.");
+            throw new IllegalArgumentException(
+                    "El stock mínimo no puede ser negativo."
+            );
         }
 
         this.stockMinimo = stockMinimo;
@@ -144,7 +161,9 @@ public class Producto {
     public void setCategoria(Categoria categoria) {
 
         if (categoria == null) {
-            throw new IllegalArgumentException("La categoría es obligatoria.");
+            throw new IllegalArgumentException(
+                    "La categoría es obligatoria."
+            );
         }
 
         this.categoria = categoria;
@@ -157,15 +176,17 @@ public class Producto {
     public void setProveedor(Proveedor proveedor) {
 
         if (proveedor == null) {
-            throw new IllegalArgumentException("El proveedor es obligatorio.");
+            throw new IllegalArgumentException(
+                    "El proveedor es obligatorio."
+            );
         }
 
         this.proveedor = proveedor;
     }
 
-    //=========================
+    // =========================
     // Métodos de negocio
-    //=========================
+    // =========================
 
     /**
      * Incrementa el stock.
@@ -173,7 +194,9 @@ public class Producto {
     public void aumentarStock(int cantidad) {
 
         if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+            throw new IllegalArgumentException(
+                    "La cantidad debe ser mayor que cero."
+            );
         }
 
         stock += cantidad;
@@ -185,11 +208,15 @@ public class Producto {
     public void disminuirStock(int cantidad) {
 
         if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
+            throw new IllegalArgumentException(
+                    "La cantidad debe ser mayor que cero."
+            );
         }
 
         if (cantidad > stock) {
-            throw new IllegalArgumentException("Stock insuficiente.");
+            throw new IllegalArgumentException(
+                    "Stock insuficiente."
+            );
         }
 
         stock -= cantidad;
@@ -209,18 +236,27 @@ public class Producto {
         return stock <= stockMinimo;
     }
 
+    // =========================
+    // Object
+    // =========================
+
     @Override
     public boolean equals(Object obj) {
 
-        if (this == obj)
+        if (this == obj) {
             return true;
+        }
 
-        if (!(obj instanceof Producto))
+        if (!(obj instanceof Producto)) {
             return false;
+        }
 
         Producto other = (Producto) obj;
 
-        return Objects.equals(codigo, other.codigo);
+        return Objects.equals(
+                codigo,
+                other.codigo
+        );
     }
 
     @Override
@@ -240,5 +276,4 @@ public class Producto {
                 ", proveedor=" + proveedor.getNombre() +
                 '}';
     }
-
 }

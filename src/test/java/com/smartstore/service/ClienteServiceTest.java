@@ -1,6 +1,8 @@
 package com.smartstore.service;
 
+import com.smartstore.exceptions.ClienteNoEncontradoException;
 import com.smartstore.model.Cliente;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,6 +10,12 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Pruebas unitarias para ClienteService.
+ *
+ * @author Jonathan Mendez
+ * @version 1.0
+ */
 public class ClienteServiceTest {
 
     private ClienteService service;
@@ -38,7 +46,19 @@ public class ClienteServiceTest {
 
         service.agregarCliente(cliente);
 
-        assertEquals(1, service.cantidadClientes());
+        assertEquals(
+                1,
+                service.cantidadClientes()
+        );
+    }
+
+    @Test
+    void clienteNuloDebeLanzarExcepcion() {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.agregarCliente(null)
+        );
     }
 
     @Test
@@ -96,10 +116,23 @@ public class ClienteServiceTest {
 
         service.agregarCliente(cliente);
 
-        Cliente encontrado = service.buscarPorId(1);
+        Cliente encontrado =
+                service.buscarPorId(1);
 
         assertNotNull(encontrado);
-        assertEquals("Jonathan", encontrado.getNombre());
+
+        assertEquals(
+                "Jonathan",
+                encontrado.getNombre()
+        );
+    }
+
+    @Test
+    void buscarClientePorIdInexistente() {
+
+        assertNull(
+                service.buscarPorId(999)
+        );
     }
 
     @Test
@@ -113,6 +146,7 @@ public class ClienteServiceTest {
                 service.buscarPorCedula("123456");
 
         assertNotNull(encontrado);
+
         assertEquals(
                 "Jonathan",
                 encontrado.getNombre()
@@ -120,7 +154,48 @@ public class ClienteServiceTest {
     }
 
     @Test
-    void actualizarClienteCorrectamente() {
+    void buscarClientePorCedulaIgnoraMayusculas() {
+
+        Cliente cliente = crearCliente();
+
+        service.agregarCliente(cliente);
+
+        Cliente encontrado =
+                service.buscarPorCedula("123456");
+
+        assertEquals(
+                cliente,
+                encontrado
+        );
+    }
+
+    @Test
+    void buscarCedulaInexistente() {
+
+        assertNull(
+                service.buscarPorCedula("999999")
+        );
+    }
+
+    @Test
+    void buscarCedulaNula() {
+
+        assertNull(
+                service.buscarPorCedula(null)
+        );
+    }
+
+    @Test
+    void buscarCedulaVacia() {
+
+        assertNull(
+                service.buscarPorCedula("")
+        );
+    }
+
+    @Test
+    void actualizarClienteCorrectamente()
+            throws ClienteNoEncontradoException {
 
         Cliente cliente = crearCliente();
 
@@ -142,14 +217,57 @@ public class ClienteServiceTest {
         Cliente resultado =
                 service.buscarPorId(1);
 
+        assertNotNull(resultado);
+
         assertEquals(
                 "Juan",
                 resultado.getNombre()
         );
 
         assertEquals(
+                "Mendez",
+                resultado.getApellido()
+        );
+
+        assertEquals(
+                "3111111111",
+                resultado.getTelefono()
+        );
+
+        assertEquals(
+                "juan@email.com",
+                resultado.getCorreo()
+        );
+
+        assertEquals(
                 "Medellin",
                 resultado.getDireccion()
+        );
+
+        assertTrue(
+                resultado.isActivo()
+        );
+    }
+
+    @Test
+    void actualizarClienteInexistente()
+            throws ClienteNoEncontradoException {
+
+        Cliente cliente = crearCliente();
+
+        assertThrows(
+                ClienteNoEncontradoException.class,
+                () -> service.actualizarCliente(cliente)
+        );
+    }
+
+    @Test
+    void actualizarClienteNulo()
+            throws ClienteNoEncontradoException {
+
+        assertThrows(
+                IllegalArgumentException.class,
+                () -> service.actualizarCliente(null)
         );
     }
 
@@ -171,9 +289,19 @@ public class ClienteServiceTest {
     }
 
     @Test
+    void eliminarClienteInexistente() {
+
+        assertFalse(
+                service.eliminarCliente(999)
+        );
+    }
+
+    @Test
     void listarClientes() {
 
-        service.agregarCliente(crearCliente());
+        service.agregarCliente(
+                crearCliente()
+        );
 
         List<Cliente> clientes =
                 service.listarClientes();
@@ -182,12 +310,37 @@ public class ClienteServiceTest {
                 1,
                 clientes.size()
         );
+
+        assertEquals(
+                "Jonathan",
+                clientes.get(0).getNombre()
+        );
+    }
+
+    @Test
+    void listarClientesDevuelveCopia() {
+
+        service.agregarCliente(
+                crearCliente()
+        );
+
+        List<Cliente> clientes =
+                service.listarClientes();
+
+        clientes.clear();
+
+        assertEquals(
+                1,
+                service.cantidadClientes()
+        );
     }
 
     @Test
     void obtenerClientesActivos() {
 
-        service.agregarCliente(crearCliente());
+        service.agregarCliente(
+                crearCliente()
+        );
 
         Cliente inactivo = new Cliente(
                 2,
@@ -209,12 +362,18 @@ public class ClienteServiceTest {
                 1,
                 activos.size()
         );
+
+        assertTrue(
+                activos.get(0).isActivo()
+        );
     }
 
     @Test
     void obtenerClientesInactivos() {
 
-        service.agregarCliente(crearCliente());
+        service.agregarCliente(
+                crearCliente()
+        );
 
         Cliente inactivo = new Cliente(
                 2,
@@ -235,6 +394,28 @@ public class ClienteServiceTest {
         assertEquals(
                 1,
                 inactivos.size()
+        );
+
+        assertFalse(
+                inactivos.get(0).isActivo()
+        );
+    }
+
+    @Test
+    void cantidadClientesDebeActualizarse() {
+
+        assertEquals(
+                0,
+                service.cantidadClientes()
+        );
+
+        service.agregarCliente(
+                crearCliente()
+        );
+
+        assertEquals(
+                1,
+                service.cantidadClientes()
         );
     }
 }
