@@ -80,7 +80,7 @@ validaciones, manejo de excepciones y pruebas automatizadas.
 El siguiente diagrama representa la arquitectura y las relaciones principales
 entre las clases del sistema SmartStore.
 
-![Diagrama de clases SmartStore](doc/diagrama-clases.png)
+![Diagrama de clases](src/doc/uml/diagrama-clases.svg)
 
 También puedes visualizar el diagrama directamente desde PlantUML:
 
