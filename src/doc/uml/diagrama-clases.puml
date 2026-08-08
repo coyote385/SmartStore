@@ -1,0 +1,284 @@
+@startuml SmartStore
+
+skinparam classAttributeIconSize 0
+
+package "com.smartstore.model" {
+
+    class Categoria {
+        - id : int
+        - nombre : String
+        - descripcion : String
+        - activa : boolean
+        --
+        + Categoria(id, nombre, descripcion, activa)
+        + getId() : int
+        + setId(id : int)
+        + getNombre() : String
+        + setNombre(nombre : String)
+        + getDescripcion() : String
+        + setDescripcion(descripcion : String)
+        + isActiva() : boolean
+        + setActiva(activa : boolean)
+        + equals(obj : Object) : boolean
+        + hashCode() : int
+        + toString() : String
+    }
+
+    class Proveedor {
+        - id : int
+        - nombre : String
+        - nit : String
+        - telefono : String
+        - correo : String
+        - direccion : String
+        - activo : boolean
+        --
+        + Proveedor(id, nombre, nit, telefono, correo, direccion, activo)
+        + getId() : int
+        + setId(id : int)
+        + getNombre() : String
+        + setNombre(nombre : String)
+        + getNit() : String
+        + setNit(nit : String)
+        + getTelefono() : String
+        + setTelefono(telefono : String)
+        + getCorreo() : String
+        + setCorreo(correo : String)
+        + getDireccion() : String
+        + setDireccion(direccion : String)
+        + isActivo() : boolean
+        + setActivo(activo : boolean)
+        + equals(obj : Object) : boolean
+        + hashCode() : int
+        + toString() : String
+    }
+
+    class Cliente {
+        - id : int
+        - nombre : String
+        - apellido : String
+        - cedula : String
+        - telefono : String
+        - correo : String
+        - direccion : String
+        - activo : boolean
+        --
+        + Cliente(id, nombre, apellido, cedula, telefono, correo, direccion, activo)
+        + getId() : int
+        + setId(id : int)
+        + getNombre() : String
+        + setNombre(nombre : String)
+        + getApellido() : String
+        + setApellido(apellido : String)
+        + getCedula() : String
+        + setCedula(cedula : String)
+        + getTelefono() : String
+        + setTelefono(telefono : String)
+        + getCorreo() : String
+        + setCorreo(correo : String)
+        + getDireccion() : String
+        + setDireccion(direccion : String)
+        + isActivo() : boolean
+        + setActivo(activo : boolean)
+        + toString() : String
+    }
+
+    class Producto {
+        - codigo : String
+        - nombre : String
+        - descripcion : String
+        - precio : double
+        - stock : int
+        - stockMinimo : int
+        - categoria : Categoria
+        - proveedor : Proveedor
+        --
+        + Producto(codigo, nombre, descripcion, precio, stock, stockMinimo, categoria, proveedor)
+        + getCodigo() : String
+        + setCodigo(codigo : String)
+        + getNombre() : String
+        + setNombre(nombre : String)
+        + getDescripcion() : String
+        + setDescripcion(descripcion : String)
+        + getPrecio() : double
+        + setPrecio(precio : double)
+        + getStock() : int
+        + setStock(stock : int)
+        + getStockMinimo() : int
+        + setStockMinimo(stockMinimo : int)
+        + getCategoria() : Categoria
+        + setCategoria(categoria : Categoria)
+        + getProveedor() : Proveedor
+        + setProveedor(proveedor : Proveedor)
+        + aumentarStock(cantidad : int)
+        + disminuirStock(cantidad : int)
+        + hayStock() : boolean
+        + stockBajo() : boolean
+        + equals(obj : Object) : boolean
+        + hashCode() : int
+        + toString() : String
+    }
+
+    class DetallePedido {
+        - producto : Producto
+        - cantidad : int
+        - precioUnitario : double
+        --
+        + DetallePedido(producto, cantidad, precioUnitario)
+        + getProducto() : Producto
+        + setProducto(producto : Producto)
+        + getCantidad() : int
+        + setCantidad(cantidad : int)
+        + getPrecioUnitario() : double
+        + setPrecioUnitario(precioUnitario : double)
+        + calcularSubtotal() : double
+        + toString() : String
+    }
+
+    class Pedido {
+        - id : int
+        - cliente : Cliente
+        - fecha : LocalDate
+        - estado : String
+        - detalles : List<DetallePedido>
+        --
+        + Pedido(id, cliente, estado)
+        + getId() : int
+        + getCliente() : Cliente
+        + getFecha() : LocalDate
+        + getEstado() : String
+        + setEstado(estado : String)
+        + getDetalles() : List<DetallePedido>
+        + agregarDetalle(detalle : DetallePedido)
+        + eliminarDetalle(detalle : DetallePedido) : boolean
+        + calcularTotal() : double
+        + cantidadProductos() : int
+        + toString() : String
+    }
+
+    class Factura {
+        - numero : int
+        - pedido : Pedido
+        - fecha : LocalDate
+        - iva : double
+        --
+        + Factura(numero, pedido, iva)
+        + getNumero() : int
+        + getPedido() : Pedido
+        + getFecha() : LocalDate
+        + getIva() : double
+        + setIva(iva : double)
+        + calcularIVA() : double
+        + calcularTotal() : double
+        + toString() : String
+    }
+}
+
+package "com.smartstore.service" {
+
+    class ClienteService {
+        - clientes : List<Cliente>
+        --
+        + ClienteService()
+        + agregarCliente(cliente : Cliente)
+        + buscarPorId(id : int) : Cliente
+        + buscarPorCedula(cedula : String) : Cliente
+        + actualizarCliente(cliente : Cliente)
+        + eliminarCliente(id : int) : boolean
+        + listarClientes() : List<Cliente>
+        + obtenerClientesActivos() : List<Cliente>
+        + obtenerClientesInactivos() : List<Cliente>
+        + cantidadClientes() : int
+    }
+
+    class InventarioService {
+        - productos : List<Producto>
+        --
+        + InventarioService()
+        + registrarProducto(producto : Producto)
+        + buscarPorCodigo(codigo : String) : Producto
+        + buscarPorNombre(nombre : String) : List<Producto>
+        + eliminarProducto(codigo : String) : boolean
+        + obtenerProductos() : List<Producto>
+        + cantidadProductos() : int
+    }
+
+    class PedidoService {
+        - pedidos : List<Pedido>
+        - consecutivoFactura : int
+        --
+        + PedidoService()
+        + crearPedido(pedido : Pedido)
+        + buscarPedido(id : int) : Pedido
+        + eliminarPedido(id : int) : boolean
+        + listarPedidos() : List<Pedido>
+        + agregarProducto(pedido, detalle)
+        + quitarProducto(pedido, detalle) : boolean
+        + calcularTotal(pedido) : double
+        + generarFactura(pedido) : Factura
+        + cancelarPedido(pedido)
+        + buscarPedidosPorCliente(cliente) : List<Pedido>
+        + cantidadPedidos() : int
+    }
+}
+
+package "com.smartstore.ui" {
+
+    class MainFrame
+    class PanelInicio
+    class PanelClientes
+    class PanelProductos
+    class PanelPedidos
+    class PanelFacturas
+    class PanelReportes
+}
+
+package "com.smartstore" {
+    class Main
+}
+
+' ==========================
+' RELACIONES DEL MODELO
+' ==========================
+
+Categoria "1" <-- "0..*" Producto : pertenece
+Proveedor "1" <-- "0..*" Producto : suministra
+
+Producto "1" <-- "0..*" DetallePedido : contiene
+
+Cliente "1" <-- "0..*" Pedido : realiza
+
+Pedido "1" *-- "0..*" DetallePedido : contiene
+
+Pedido "1" <-- "0..*" Factura : genera
+
+' ==========================
+' RELACIONES DE SERVICIOS
+' ==========================
+
+ClienteService "1" o-- "0..*" Cliente : gestiona
+InventarioService "1" o-- "0..*" Producto : gestiona
+PedidoService "1" o-- "0..*" Pedido : gestiona
+
+PedidoService ..> DetallePedido : utiliza
+PedidoService ..> Factura : genera
+
+' ==========================
+' RELACIONES UI
+' ==========================
+
+Main --> MainFrame : inicia
+
+MainFrame --> PanelInicio
+MainFrame --> PanelClientes
+MainFrame --> PanelProductos
+MainFrame --> PanelPedidos
+MainFrame --> PanelFacturas
+MainFrame --> PanelReportes
+
+PanelClientes ..> ClienteService
+PanelProductos ..> InventarioService
+PanelPedidos ..> PedidoService
+PanelFacturas ..> PedidoService
+
+@enduml
