@@ -38,59 +38,247 @@ public class MainFrame extends JFrame {
 
         setLayout(new BorderLayout());
 
-        JPanel encabezado = new JPanel(new BorderLayout());
+        // =====================================================
+        // ENCABEZADO
+        // =====================================================
 
-        JLabel titulo = new JLabel("SmartStore");
-        titulo.setFont(new Font("Arial", Font.BOLD, 26));
-
-        encabezado.add(titulo, BorderLayout.WEST);
-
-        add(encabezado, BorderLayout.NORTH);
-
-        JPanel menu = new JPanel(
-                new GridLayout(7, 1, 5, 5)
+        JPanel encabezado = new JPanel(
+                new BorderLayout()
         );
 
-        JButton btnInicio = new JButton("Inicio");
-        JButton btnClientes = new JButton("Clientes");
-        JButton btnProductos = new JButton("Productos");
-        JButton btnPedidos = new JButton("Pedidos");
-        JButton btnFacturas = new JButton("Facturas");
-        JButton btnReportes = new JButton("Reportes");
-        JButton btnSalir = new JButton("Salir");
+        encabezado.setBorder(
+                BorderFactory.createEmptyBorder(
+                        8,
+                        15,
+                        8,
+                        15
+                )
+        );
 
-        menu.add(btnInicio);
-        menu.add(btnClientes);
-        menu.add(btnProductos);
-        menu.add(btnPedidos);
-        menu.add(btnFacturas);
-        menu.add(btnReportes);
-        menu.add(btnSalir);
+        encabezado.setBackground(
+                new Color(35, 45, 55)
+        );
 
-        add(menu, BorderLayout.WEST);
+        // Título
+        JLabel titulo = new JLabel(
+                "SmartStore"
+        );
 
-        panelContenido = new JPanel(new BorderLayout());
+        titulo.setFont(
+                new Font(
+                        "Arial",
+                        Font.BOLD,
+                        24
+                )
+        );
+
+        titulo.setForeground(
+                Color.WHITE
+        );
+
+        // Subtítulo
+        JLabel subtitulo = new JLabel(
+                "Sistema de gestión de tienda"
+        );
+
+        subtitulo.setFont(
+                new Font(
+                        "Arial",
+                        Font.PLAIN,
+                        13
+                )
+        );
+
+        subtitulo.setForeground(
+                new Color(210, 210, 210)
+        );
+
+        JPanel informacion = new JPanel(
+                new GridLayout(2, 1)
+        );
+
+        informacion.setOpaque(false);
+
+        informacion.add(titulo);
+        informacion.add(subtitulo);
+
+        encabezado.add(
+                informacion,
+                BorderLayout.WEST
+        );
+
+        add(
+                encabezado,
+                BorderLayout.NORTH
+        );
+
+        // =====================================================
+// MENÚ LATERAL
+// =====================================================
+
+JPanel menu = new JPanel(new BorderLayout());
+
+menu.setBackground(
+        new Color(28, 36, 45)
+);
+
+menu.setBorder(
+        BorderFactory.createEmptyBorder(
+                10,
+                8,
+                10,
+                8
+        )
+);
+
+// -----------------------------------------------------
+// BOTONES DEL MENÚ
+// -----------------------------------------------------
+
+JPanel opcionesMenu = new JPanel(
+        new GridLayout(
+                6,
+                1,
+                0,
+                4
+        )
+);
+
+opcionesMenu.setOpaque(false);
+
+JButton btnInicio =
+        new JButton("Inicio");
+
+JButton btnClientes =
+        new JButton("Clientes");
+
+JButton btnProductos =
+        new JButton("Productos");
+
+JButton btnPedidos =
+        new JButton("Pedidos");
+
+JButton btnFacturas =
+        new JButton("Facturas");
+
+JButton btnReportes =
+        new JButton("Reportes");
+
+// Estilo
+configurarBoton(btnInicio);
+configurarBoton(btnClientes);
+configurarBoton(btnProductos);
+configurarBoton(btnPedidos);
+configurarBoton(btnFacturas);
+configurarBoton(btnReportes);
+
+// Botón inicial activo
+btnInicio.setBackground(
+        new Color(0, 170, 220)
+);
+
+btnInicio.setForeground(
+        Color.WHITE
+);
+
+// Agregar botones
+opcionesMenu.add(btnInicio);
+opcionesMenu.add(btnClientes);
+opcionesMenu.add(btnProductos);
+opcionesMenu.add(btnPedidos);
+opcionesMenu.add(btnFacturas);
+opcionesMenu.add(btnReportes);
+
+menu.add(
+        opcionesMenu,
+        BorderLayout.NORTH
+);
+
+// -----------------------------------------------------
+// BOTÓN SALIR
+// -----------------------------------------------------
+
+JButton btnSalir =
+        new JButton("Salir");
+
+configurarBoton(btnSalir);
+
+btnSalir.setBackground(
+        new Color(190, 60, 60)
+);
+
+btnSalir.setForeground(
+        Color.WHITE
+);
+
+JPanel panelSalir = new JPanel(
+        new BorderLayout()
+);
+
+panelSalir.setOpaque(false);
+
+panelSalir.setBorder(
+        BorderFactory.createEmptyBorder(
+                10,
+                0,
+                0,
+                0
+        )
+);
+
+panelSalir.add(
+        btnSalir,
+        BorderLayout.CENTER
+);
+
+menu.add(
+        panelSalir,
+        BorderLayout.SOUTH
+);
+
+add(
+        menu,
+        BorderLayout.WEST
+);
+
+        // =====================================================
+        // CONTENIDO
+        // =====================================================
+
+        panelContenido =
+                new JPanel(
+                        new BorderLayout()
+                );
 
         add(
                 panelContenido,
                 BorderLayout.CENTER
         );
 
-        mostrarPanel(new PanelInicio());
+        // Mostrar inicio al arrancar
+        mostrarInicio();
+
+        // =====================================================
+        // EVENTOS
+        // =====================================================
 
         btnInicio.addActionListener(e ->
-                mostrarPanel(new PanelInicio())
+                mostrarInicio()
         );
 
         btnClientes.addActionListener(e ->
                 mostrarPanel(
-                        new PanelClientes(clienteService)
+                        new PanelClientes(
+                                clienteService
+                        )
                 )
         );
 
         btnProductos.addActionListener(e ->
                 mostrarPanel(
-                        new PanelProductos(inventarioService)
+                        new PanelProductos(
+                                inventarioService
+                        )
                 )
         );
 
@@ -126,20 +314,85 @@ public class MainFrame extends JFrame {
 
         btnSalir.addActionListener(e -> {
 
-            int opcion = JOptionPane.showConfirmDialog(
-                    this,
-                    "¿Desea salir de SmartStore?",
-                    "Salir",
-                    JOptionPane.YES_NO_OPTION
-            );
+            int opcion =
+                    JOptionPane.showConfirmDialog(
+                            this,
+                            "¿Desea salir de SmartStore?",
+                            "Salir",
+                            JOptionPane.YES_NO_OPTION
+                    );
 
-            if (opcion == JOptionPane.YES_OPTION) {
+            if (opcion ==
+                    JOptionPane.YES_OPTION) {
+
                 System.exit(0);
             }
         });
     }
 
-    private void mostrarPanel(JPanel panel) {
+    // =========================================================
+// CONFIGURAR BOTÓN
+// =========================================================
+
+private void configurarBoton(JButton boton) {
+
+    boton.setFocusPainted(false);
+
+    boton.setFont(
+            new Font(
+                    "Arial",
+                    Font.BOLD,
+                    13
+            )
+    );
+
+    boton.setForeground(
+            Color.WHITE
+    );
+
+    boton.setBackground(
+            new Color(45, 57, 70)
+    );
+
+    boton.setBorder(
+            BorderFactory.createEmptyBorder(
+                    10,
+                    15,
+                    10,
+                    15
+            )
+    );
+
+    boton.setHorizontalAlignment(
+            SwingConstants.LEFT
+    );
+
+    boton.setCursor(
+            new Cursor(Cursor.HAND_CURSOR)
+    );
+}
+
+    // =========================================================
+    // MOSTRAR INICIO
+    // =========================================================
+
+    private void mostrarInicio() {
+
+        mostrarPanel(
+                new PanelInicio(
+                        clienteService,
+                        inventarioService,
+                        pedidoService
+                )
+        );
+    }
+
+    // =========================================================
+    // MOSTRAR PANEL
+    // =========================================================
+
+    private void mostrarPanel(
+            JPanel panel) {
 
         panelContenido.removeAll();
 
