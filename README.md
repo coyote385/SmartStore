@@ -9,7 +9,7 @@ inventario mediante una aplicación de escritorio con interfaz gráfica.
 
 ---
 
-## 📋 Descripción
+## Descripción
 
 SmartStore es una aplicación de escritorio desarrollada como proyecto
 integrador académico.
@@ -42,7 +42,7 @@ validaciones, manejo de excepciones y pruebas automatizadas.
 
 ---
 
-## 🎯 Objetivos específicos
+## Objetivos específicos
 
 - Gestionar productos y su información dentro del inventario.
 - Gestionar clientes y sus datos.
@@ -61,7 +61,7 @@ validaciones, manejo de excepciones y pruebas automatizadas.
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## Tecnologías utilizadas
 
 | Tecnología | Uso |
 |---|---|
@@ -88,7 +88,7 @@ También puedes visualizar el diagrama directamente desde PlantUML:
 
 ---
 
-## 💻 Requisitos
+## Requisitos
 
 Antes de ejecutar el proyecto se necesita tener instalado:
 
@@ -98,67 +98,6 @@ Antes de ejecutar el proyecto se necesita tener instalado:
 - Un IDE compatible con Java, como IntelliJ IDEA, Eclipse o Visual Studio
   Code con soporte para Java.
 
-Para comprobar las versiones:
-
-```bash
-java -version
-
 ---
 
-SmartStore/
-│
-├── src/
-│   ├── main/
-│   │   └── java/
-│   │       └── com/
-│   │           └── smartstore/
-│   │               ├── Main.java
-│   │               │
-│   │               ├── model/
-│   │               │   ├── Categoria.java
-│   │               │   ├── Cliente.java
-│   │               │   ├── DetallePedido.java
-│   │               │   ├── Factura.java
-│   │               │   ├── Pedido.java
-│   │               │   ├── Producto.java
-│   │               │   └── Proveedor.java
-│   │               │
-│   │               ├── service/
-│   │               │   ├── ClienteService.java
-│   │               │   ├── InventarioService.java
-│   │               │   └── PedidoService.java
-│   │               │
-│   │               ├── structures/
-│   │               │
-│   │               ├── algorithms/
-│   │               │
-│   │               ├── exceptions/
-│   │               │
-│   │               └── ui/
-│   │                   ├── MainFrame.java
-│   │                   ├── PanelInicio.java
-│   │                   ├── PanelClientes.java
-│   │                   ├── PanelProductos.java
-│   │                   ├── PanelPedidos.java
-│   │                   ├── PanelFacturas.java
-│   │                   └── PanelReportes.java
-│   │
-│   └── test/
-│       └── java/
-│           └── com/
-│               └── smartstore/
-│                   ├── model/
-│                   ├── service/
-│                   ├── structures/
-│                   └── algorithms/
-│
-├── doc/
-│   ├── uml/
-│   ├── capturas/
-│   ├── documento-tecnico.md
-│   └── manual-usuario.md
-│
-├── pom.xml
-├── README.md
-├── LICENSE
-└── .gitignore
+## Autor: Jonathan Alejandro Mendez Alvis
