@@ -11,6 +11,8 @@ import java.time.LocalDate;
  */
 public class Factura implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     private int numero;
     private Pedido pedido;
     private LocalDate fecha;

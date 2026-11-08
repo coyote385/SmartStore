@@ -1,406 +1,366 @@
 package com.smartstore.ui;
 
+import com.smartstore.algorithms.Ordenamientos;
 import com.smartstore.model.Cliente;
 import com.smartstore.service.ClienteService;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PanelClientes extends JPanel {
 
     private final ClienteService clienteService;
 
+    // Componentes del formulario
+    private JTextField txtId;
+    private JTextField txtNombre;
+    private JTextField txtApellido;
+    private JTextField txtCedula;
+    private JTextField txtTelefono;
+    private JTextField txtCorreo;
+    private JTextField txtDireccion;
+    private JCheckBox chkActivo;
+
+    // Componentes de búsqueda
+    private JTextField txtBuscar;
+
+    // Tabla
+    private JTable tablaClientes;
+    private DefaultTableModel modeloTabla;
+
     public PanelClientes(ClienteService clienteService) {
-
         this.clienteService = clienteService;
+        inicializarInterfaz();
+        cargarDatosTabla(clienteService.listarClientes());
+    }
 
-        setLayout(new BorderLayout(10, 10));
+    private void inicializarInterfaz() {
+        setLayout(new BorderLayout(15, 15));
+        setBorder(new EmptyBorder(15, 20, 15, 20));
+        setBackground(new Color(245, 247, 250));
 
-        JLabel titulo = new JLabel(
-                "Gestión de Clientes",
-                SwingConstants.CENTER
-        );
+        // =====================================================
+        // ENCABEZADO
+        // =====================================================
+        JPanel panelNorte = new JPanel(new BorderLayout(10, 10));
+        panelNorte.setOpaque(false);
 
-        titulo.setFont(
-                new Font("Arial", Font.BOLD, 24)
-        );
+        JLabel lblTitulo = new JLabel("Gestión de Clientes");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 22));
+        lblTitulo.setForeground(new Color(35, 45, 55));
+        panelNorte.add(lblTitulo, BorderLayout.WEST);
 
-        add(titulo, BorderLayout.NORTH);
+        // Barra de búsqueda rápida
+        JPanel panelBusqueda = new JPanel(new FlowLayout(FlowLayout.RIGHT, 8, 0));
+        panelBusqueda.setOpaque(false);
 
-        JPanel botones = new JPanel(
-                new FlowLayout()
-        );
+        txtBuscar = new JTextField(15);
+        JButton btnBuscar = new JButton("Buscar");
+        JButton btnRefrescar = new JButton("Mostrar Todos");
+        JButton btnOrdenarNombre = new JButton("Ordenar A-Z");
 
-        JButton btnRegistrar =
-                new JButton("Registrar cliente");
+        estilizarBotonSecundario(btnBuscar);
+        estilizarBotonSecundario(btnRefrescar);
+        estilizarBotonSecundario(btnOrdenarNombre);
 
-        JButton btnBuscar =
-                new JButton("Buscar cliente");
+        panelBusqueda.add(new JLabel("Cédula / Nombre:"));
+        panelBusqueda.add(txtBuscar);
+        panelBusqueda.add(btnBuscar);
+        panelBusqueda.add(btnRefrescar);
+        panelBusqueda.add(btnOrdenarNombre);
 
-        JButton btnActualizar =
-                new JButton("Actualizar cliente");
+        panelNorte.add(panelBusqueda, BorderLayout.EAST);
+        add(panelNorte, BorderLayout.NORTH);
 
-        JButton btnEliminar =
-                new JButton("Eliminar cliente");
+        // =====================================================
+        // PANEL IZQUIERDO: FORMULARIO DE CLIENTE
+        // =====================================================
+        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        panelFormulario.setPreferredSize(new Dimension(340, 0));
+        panelFormulario.setBackground(Color.WHITE);
+        panelFormulario.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 225, 230)),
+                BorderFactory.createTitledBorder(
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
+                        "Datos del Cliente",
+                        TitledBorder.LEFT,
+                        TitledBorder.TOP,
+                        new Font("Arial", Font.BOLD, 14),
+                        new Color(35, 45, 55)
+                )
+        ));
 
-        JButton btnListar =
-                new JButton("Listar clientes");
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.weightx = 1.0;
 
-        botones.add(btnRegistrar);
-        botones.add(btnBuscar);
-        botones.add(btnActualizar);
-        botones.add(btnEliminar);
-        botones.add(btnListar);
+        txtId = new JTextField();
+        txtNombre = new JTextField();
+        txtApellido = new JTextField();
+        txtCedula = new JTextField();
+        txtTelefono = new JTextField();
+        txtCorreo = new JTextField();
+        txtDireccion = new JTextField();
+        chkActivo = new JCheckBox("Cliente Activo", true);
+        chkActivo.setOpaque(false);
 
-        add(botones, BorderLayout.CENTER);
+        agregarCampo(panelFormulario, gbc, 0, "ID:", txtId);
+        agregarCampo(panelFormulario, gbc, 1, "Cédula:", txtCedula);
+        agregarCampo(panelFormulario, gbc, 2, "Nombre:", txtNombre);
+        agregarCampo(panelFormulario, gbc, 3, "Apellido:", txtApellido);
+        agregarCampo(panelFormulario, gbc, 4, "Teléfono:", txtTelefono);
+        agregarCampo(panelFormulario, gbc, 5, "Correo:", txtCorreo);
+        agregarCampo(panelFormulario, gbc, 6, "Dirección:", txtDireccion);
 
-        btnRegistrar.addActionListener(e ->
-                registrarCliente()
-        );
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        panelFormulario.add(chkActivo, gbc);
 
-        btnBuscar.addActionListener(e ->
-                buscarCliente()
-        );
+        // Botones de acción del formulario
+        JPanel panelAcciones = new JPanel(new GridLayout(2, 2, 8, 8));
+        panelAcciones.setOpaque(false);
 
-        btnActualizar.addActionListener(e ->
-                actualizarCliente()
-        );
+        JButton btnGuardar = new JButton("Registrar");
+        JButton btnActualizar = new JButton("Actualizar");
+        JButton btnEliminar = new JButton("Eliminar");
+        JButton btnLimpiar = new JButton("Limpiar");
 
-        btnEliminar.addActionListener(e ->
-                eliminarCliente()
-        );
+        estilizarBotonPrimario(btnGuardar);
+        estilizarBotonSecundario(btnActualizar);
+        estilizarBotonPeligro(btnEliminar);
+        estilizarBotonSecundario(btnLimpiar);
 
-        btnListar.addActionListener(e ->
-                listarClientes()
-        );
+        panelAcciones.add(btnGuardar);
+        panelAcciones.add(btnActualizar);
+        panelAcciones.add(btnEliminar);
+        panelAcciones.add(btnLimpiar);
+
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.insets = new Insets(15, 5, 5, 5);
+        panelFormulario.add(panelAcciones, gbc);
+
+        add(panelFormulario, BorderLayout.WEST);
+
+        // =====================================================
+        // PANEL CENTRAL: TABLA DE CLIENTES
+        // =====================================================
+        String[] columnas = {"ID", "Cédula", "Nombre", "Apellido", "Teléfono", "Correo", "Dirección", "Estado"};
+        modeloTabla = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        tablaClientes = new JTable(modeloTabla);
+        tablaClientes.setRowHeight(26);
+        tablaClientes.setFont(new Font("Arial", Font.PLAIN, 12));
+        tablaClientes.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        tablaClientes.getTableHeader().setBackground(new Color(235, 240, 245));
+        tablaClientes.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        tablaClientes.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting() && tablaClientes.getSelectedRow() != -1) {
+                cargarFormularioDesdeFila(tablaClientes.getSelectedRow());
+            }
+        });
+
+        JScrollPane scrollTabla = new JScrollPane(tablaClientes);
+        scrollTabla.getViewport().setBackground(Color.WHITE);
+        scrollTabla.setBorder(BorderFactory.createLineBorder(new Color(220, 225, 230)));
+        add(scrollTabla, BorderLayout.CENTER);
+
+        // =====================================================
+        // EVENTOS
+        // =====================================================
+        btnGuardar.addActionListener(e -> registrarCliente());
+        btnActualizar.addActionListener(e -> actualizarCliente());
+        btnEliminar.addActionListener(e -> eliminarCliente());
+        btnLimpiar.addActionListener(e -> limpiarFormulario());
+
+        btnBuscar.addActionListener(e -> buscarClientes());
+        btnRefrescar.addActionListener(e -> {
+            txtBuscar.setText("");
+            cargarDatosTabla(clienteService.listarClientes());
+        });
+
+        btnOrdenarNombre.addActionListener(e -> {
+            List<Cliente> clientes = clienteService.listarClientes();
+            Ordenamientos.quickSortClientesPorNombre(clientes, true);
+            cargarDatosTabla(clientes);
+        });
+    }
+
+    private void agregarCampo(JPanel panel, GridBagConstraints gbc, int fila, String etiqueta, JComponent campo) {
+        gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = fila;
+        gbc.weightx = 0.3;
+        JLabel lbl = new JLabel(etiqueta);
+        lbl.setFont(new Font("Arial", Font.BOLD, 12));
+        panel.add(lbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 0.7;
+        panel.add(campo, gbc);
+    }
+
+    private void cargarDatosTabla(List<Cliente> clientes) {
+        modeloTabla.setRowCount(0);
+        for (Cliente c : clientes) {
+            modeloTabla.addRow(new Object[]{
+                    c.getId(),
+                    c.getCedula(),
+                    c.getNombre(),
+                    c.getApellido(),
+                    c.getTelefono(),
+                    c.getCorreo(),
+                    c.getDireccion(),
+                    c.isActivo() ? "Activo" : "Inactivo"
+            });
+        }
+    }
+
+    private void cargarFormularioDesdeFila(int fila) {
+        txtId.setText(modeloTabla.getValueAt(fila, 0).toString());
+        txtCedula.setText(modeloTabla.getValueAt(fila, 1).toString());
+        txtNombre.setText(modeloTabla.getValueAt(fila, 2).toString());
+        txtApellido.setText(modeloTabla.getValueAt(fila, 3).toString());
+        txtTelefono.setText(modeloTabla.getValueAt(fila, 4).toString());
+        txtCorreo.setText(modeloTabla.getValueAt(fila, 5).toString());
+        txtDireccion.setText(modeloTabla.getValueAt(fila, 6).toString());
+        chkActivo.setSelected("Activo".equalsIgnoreCase(modeloTabla.getValueAt(fila, 7).toString()));
+        txtId.setEditable(false);
     }
 
     private void registrarCliente() {
-
         try {
+            int id = Integer.parseInt(txtId.getText().trim());
+            String cedula = txtCedula.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String apellido = txtApellido.getText().trim();
+            String telefono = txtTelefono.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String direccion = txtDireccion.getText().trim();
+            boolean activo = chkActivo.isSelected();
 
-            String idTexto = JOptionPane.showInputDialog(
-                    this,
-                    "ID del cliente:"
-            );
-
-            if (idTexto == null) {
-                return;
-            }
-
-            int id = Integer.parseInt(idTexto);
-
-            String nombre = JOptionPane.showInputDialog(
-                    this,
-                    "Nombre:"
-            );
-
-            String apellido = JOptionPane.showInputDialog(
-                    this,
-                    "Apellido:"
-            );
-
-            String cedula = JOptionPane.showInputDialog(
-                    this,
-                    "Cédula:"
-            );
-
-            String telefono = JOptionPane.showInputDialog(
-                    this,
-                    "Teléfono:"
-            );
-
-            String correo = JOptionPane.showInputDialog(
-                    this,
-                    "Correo:"
-            );
-
-            String direccion = JOptionPane.showInputDialog(
-                    this,
-                    "Dirección:"
-            );
-
-            if (nombre == null ||
-                    apellido == null ||
-                    cedula == null ||
-                    telefono == null ||
-                    correo == null ||
-                    direccion == null) {
-
-                return;
-            }
-
-            Cliente cliente = new Cliente(
-                    id,
-                    nombre,
-                    apellido,
-                    cedula,
-                    telefono,
-                    correo,
-                    direccion,
-                    true
-            );
-
+            Cliente cliente = new Cliente(id, nombre, apellido, cedula, telefono, correo, direccion, activo);
             clienteService.agregarCliente(cliente);
 
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Cliente registrado correctamente."
-            );
-
+            cargarDatosTabla(clienteService.listarClientes());
+            limpiarFormulario();
+            JOptionPane.showMessageDialog(this, "Cliente registrado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "El ID debe ser un número válido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
-        } catch (IllegalArgumentException ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-        }
-    }
-
-    private void buscarCliente() {
-
-        String texto = JOptionPane.showInputDialog(
-                this,
-                "Ingrese el ID del cliente:"
-        );
-
-        if (texto == null) {
-            return;
-        }
-
-        try {
-
-            int id = Integer.parseInt(texto);
-
-            Cliente cliente =
-                    clienteService.buscarPorId(id);
-
-            if (cliente == null) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Cliente no encontrado."
-                );
-
-                return;
-            }
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    cliente.toString(),
-                    "Cliente encontrado",
-                    JOptionPane.INFORMATION_MESSAGE
-            );
-
-        } catch (NumberFormatException ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "ID inválido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this, "El ID debe ser un número entero válido.", "Error", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void actualizarCliente() {
-
         try {
+            int id = Integer.parseInt(txtId.getText().trim());
+            String cedula = txtCedula.getText().trim();
+            String nombre = txtNombre.getText().trim();
+            String apellido = txtApellido.getText().trim();
+            String telefono = txtTelefono.getText().trim();
+            String correo = txtCorreo.getText().trim();
+            String direccion = txtDireccion.getText().trim();
+            boolean activo = chkActivo.isSelected();
 
-            String texto = JOptionPane.showInputDialog(
-                    this,
-                    "ID del cliente:"
-            );
+            Cliente cliente = new Cliente(id, nombre, apellido, cedula, telefono, correo, direccion, activo);
+            clienteService.actualizarCliente(cliente);
 
-            if (texto == null) {
-                return;
-            }
-
-            int id = Integer.parseInt(texto);
-
-            Cliente existente =
-                    clienteService.buscarPorId(id);
-
-            if (existente == null) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Cliente no encontrado."
-                );
-
-                return;
-            }
-
-            String nombre = JOptionPane.showInputDialog(
-                    this,
-                    "Nombre:",
-                    existente.getNombre()
-            );
-
-            String apellido = JOptionPane.showInputDialog(
-                    this,
-                    "Apellido:",
-                    existente.getApellido()
-            );
-
-            String cedula = JOptionPane.showInputDialog(
-                    this,
-                    "Cédula:",
-                    existente.getCedula()
-            );
-
-            String telefono = JOptionPane.showInputDialog(
-                    this,
-                    "Teléfono:",
-                    existente.getTelefono()
-            );
-
-            String correo = JOptionPane.showInputDialog(
-                    this,
-                    "Correo:",
-                    existente.getCorreo()
-            );
-
-            String direccion = JOptionPane.showInputDialog(
-                    this,
-                    "Dirección:",
-                    existente.getDireccion()
-            );
-
-            if (nombre == null ||
-                    apellido == null ||
-                    cedula == null ||
-                    telefono == null ||
-                    correo == null ||
-                    direccion == null) {
-
-                return;
-            }
-
-            Cliente actualizado = new Cliente(
-                    id,
-                    nombre,
-                    apellido,
-                    cedula,
-                    telefono,
-                    correo,
-                    direccion,
-                    existente.isActivo()
-            );
-
-            clienteService.actualizarCliente(actualizado);
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Cliente actualizado correctamente."
-            );
-
+            cargarDatosTabla(clienteService.listarClientes());
+            limpiarFormulario();
+            JOptionPane.showMessageDialog(this, "Cliente actualizado exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (NumberFormatException ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "ID inválido.",
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
-
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente válido de la tabla.", "Error", JOptionPane.ERROR_MESSAGE);
         } catch (Exception ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    ex.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     private void eliminarCliente() {
-
-        String texto = JOptionPane.showInputDialog(
-                this,
-                "ID del cliente:"
-        );
-
-        if (texto == null) {
-            return;
-        }
-
         try {
-
-            int id = Integer.parseInt(texto);
-
-            boolean eliminado =
-                    clienteService.eliminarCliente(id);
-
-            if (eliminado) {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Cliente eliminado correctamente."
-                );
-
-            } else {
-
-                JOptionPane.showMessageDialog(
-                        this,
-                        "Cliente no encontrado."
-                );
+            int id = Integer.parseInt(txtId.getText().trim());
+            int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar al cliente con ID " + id + "?", "Confirmar Eliminación", JOptionPane.YES_NO_OPTION);
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                boolean eliminado = clienteService.eliminarCliente(id);
+                if (eliminado) {
+                    cargarDatosTabla(clienteService.listarClientes());
+                    limpiarFormulario();
+                    JOptionPane.showMessageDialog(this, "Cliente eliminado correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró el cliente con ID " + id, "Aviso", JOptionPane.WARNING_MESSAGE);
+                }
             }
-
         } catch (NumberFormatException ex) {
-
-            JOptionPane.showMessageDialog(
-                    this,
-                    "ID inválido."
-            );
+            JOptionPane.showMessageDialog(this, "Seleccione un cliente de la tabla para eliminar.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
-    private void listarClientes() {
-
-        StringBuilder texto =
-                new StringBuilder();
-
-        for (Cliente cliente :
-                clienteService.listarClientes()) {
-
-            texto.append(cliente)
-                    .append("\n\n");
+    private void buscarClientes() {
+        String criterio = txtBuscar.getText().trim().toLowerCase();
+        if (criterio.isBlank()) {
+            cargarDatosTabla(clienteService.listarClientes());
+            return;
         }
 
-        if (texto.length() == 0) {
-            texto.append("No hay clientes registrados.");
+        List<Cliente> filtrados = new ArrayList<>();
+        for (Cliente c : clienteService.listarClientes()) {
+            if (c.getCedula().toLowerCase().contains(criterio) ||
+                c.getNombre().toLowerCase().contains(criterio) ||
+                c.getApellido().toLowerCase().contains(criterio)) {
+                filtrados.add(c);
+            }
         }
+        cargarDatosTabla(filtrados);
+    }
 
-        JTextArea area =
-                new JTextArea(texto.toString());
+    private void limpiarFormulario() {
+        txtId.setText("");
+        txtId.setEditable(true);
+        txtCedula.setText("");
+        txtNombre.setText("");
+        txtApellido.setText("");
+        txtTelefono.setText("");
+        txtCorreo.setText("");
+        txtDireccion.setText("");
+        chkActivo.setSelected(true);
+        tablaClientes.clearSelection();
+    }
 
-        area.setEditable(false);
+    private void estilizarBotonPrimario(JButton btn) {
+        btn.setBackground(new Color(0, 150, 214));
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Arial", Font.BOLD, 12));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
 
-        JScrollPane scroll =
-                new JScrollPane(area);
+    private void estilizarBotonSecundario(JButton btn) {
+        btn.setBackground(new Color(230, 235, 240));
+        btn.setForeground(new Color(40, 50, 60));
+        btn.setFont(new Font("Arial", Font.BOLD, 12));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    }
 
-        scroll.setPreferredSize(
-                new Dimension(700, 400)
-        );
-
-        JOptionPane.showMessageDialog(
-                this,
-                scroll,
-                "Clientes",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+    private void estilizarBotonPeligro(JButton btn) {
+        btn.setBackground(new Color(210, 60, 60));
+        btn.setForeground(Color.WHITE);
+        btn.setFont(new Font("Arial", Font.BOLD, 12));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 }

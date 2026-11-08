@@ -242,4 +242,38 @@ public class PedidoServiceTest {
                 pedidos.size()
         );
     }
+
+    @Test
+    void testCargarPedidosYLimpiar() {
+        Pedido p1 = new Pedido(1, cliente, "Pendiente");
+        Pedido p2 = new Pedido(2, cliente, "Procesado");
+
+        service.cargarPedidos(List.of(p1, p2));
+        assertEquals(2, service.cantidadPedidos());
+
+        service.limpiar();
+        assertEquals(0, service.cantidadPedidos());
+
+        service.cargarPedidos(null);
+        assertEquals(0, service.cantidadPedidos());
+    }
+
+    @Test
+    void testIntegracionColaPendientesYDespacho() {
+        Pedido p1 = new Pedido(10, cliente, "Pendiente");
+        service.crearPedido(p1);
+
+        assertTrue(service.tienePedidosPendientes());
+        assertEquals(1, service.cantidadPedidosPendientes());
+        assertEquals(p1, service.consultarProximoPedido());
+
+        Pedido despachado = service.despacharSiguientePedido();
+        assertNotNull(despachado);
+        assertEquals("Despachado", despachado.getEstado());
+        assertEquals(0, service.cantidadPedidosPendientes());
+        assertNull(service.despacharSiguientePedido());
+
+        assertNotNull(service.getHistorial());
+        assertTrue(service.obtenerUltimaOperacion().contains("Despachado"));
+    }
 }

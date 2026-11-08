@@ -94,6 +94,15 @@ public class GrafoLogistico {
     }
 
     /**
+     * Obtiene la lista de todos los puntos registrados en el grafo.
+     *
+     * @return Lista de nombres de puntos.
+     */
+    public List<String> obtenerPuntos() {
+        return new ArrayList<>(conexiones.keySet());
+    }
+
+    /**
      * Verifica si existe un punto.
      *
      * @param punto Punto que se desea consultar.

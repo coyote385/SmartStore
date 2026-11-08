@@ -53,7 +53,7 @@ public class TablaHashProductos {
      */
     private int calcularIndice(String codigo) {
 
-        return Math.abs(codigo.hashCode())
+        return Math.abs(codigo.toUpperCase().hashCode())
                 % CAPACIDAD;
     }
 
@@ -78,7 +78,7 @@ public class TablaHashProductos {
 
         while (actual != null) {
 
-            if (actual.codigo.equals(codigo)) {
+            if (actual.codigo.equalsIgnoreCase(codigo)) {
 
                 throw new IllegalArgumentException(
                         "Ya existe un producto con ese código."
@@ -114,7 +114,7 @@ public class TablaHashProductos {
 
         while (actual != null) {
 
-            if (actual.codigo.equals(codigo)) {
+            if (actual.codigo.equalsIgnoreCase(codigo)) {
                 return actual.producto;
             }
 
@@ -141,7 +141,7 @@ public class TablaHashProductos {
 
         while (actual != null) {
 
-            if (actual.codigo.equals(codigo)) {
+            if (actual.codigo.equalsIgnoreCase(codigo)) {
 
                 if (anterior == null) {
                     tabla[indice] =

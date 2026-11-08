@@ -1,12 +1,19 @@
 package com.smartstore.ui;
 
+import com.smartstore.model.Cliente;
 import com.smartstore.model.Factura;
+import com.smartstore.model.Pedido;
+import com.smartstore.model.Producto;
 import com.smartstore.service.ClienteService;
 import com.smartstore.service.InventarioService;
+import com.smartstore.service.LogisticaService;
 import com.smartstore.service.PedidoService;
+import com.smartstore.service.PersistenciaService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,19 +24,32 @@ public class MainFrame extends JFrame {
     private final ClienteService clienteService;
     private final InventarioService inventarioService;
     private final PedidoService pedidoService;
+    private final LogisticaService logisticaService;
     private final List<Factura> facturas;
+    private final PersistenciaService persistenciaService;
 
     public MainFrame() {
 
         clienteService = new ClienteService();
         inventarioService = new InventarioService();
         pedidoService = new PedidoService();
+        logisticaService = new LogisticaService();
         facturas = new ArrayList<>();
+        persistenciaService = new PersistenciaService();
+
+        cargarDatosDesdeArchivos();
 
         setTitle("SmartStore");
         setSize(1200, 700);
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                confirmarYSalir();
+            }
+        });
 
         inicializarInterfaz();
     }
@@ -137,7 +157,7 @@ menu.setBorder(
 
 JPanel opcionesMenu = new JPanel(
         new GridLayout(
-                6,
+                7,
                 1,
                 0,
                 4
@@ -161,6 +181,9 @@ JButton btnPedidos =
 JButton btnFacturas =
         new JButton("Facturas");
 
+JButton btnLogistica =
+        new JButton("Logística y Rutas");
+
 JButton btnReportes =
         new JButton("Reportes");
 
@@ -170,6 +193,7 @@ configurarBoton(btnClientes);
 configurarBoton(btnProductos);
 configurarBoton(btnPedidos);
 configurarBoton(btnFacturas);
+configurarBoton(btnLogistica);
 configurarBoton(btnReportes);
 
 // Botón inicial activo
@@ -187,6 +211,7 @@ opcionesMenu.add(btnClientes);
 opcionesMenu.add(btnProductos);
 opcionesMenu.add(btnPedidos);
 opcionesMenu.add(btnFacturas);
+opcionesMenu.add(btnLogistica);
 opcionesMenu.add(btnReportes);
 
 menu.add(
@@ -195,8 +220,13 @@ menu.add(
 );
 
 // -----------------------------------------------------
-// BOTÓN SALIR
+// BOTONES INFERIORES: GUARDAR Y SALIR
 // -----------------------------------------------------
+
+JButton btnGuardar = new JButton("Guardar datos");
+configurarBoton(btnGuardar);
+btnGuardar.setBackground(new Color(40, 140, 75));
+btnGuardar.setForeground(Color.WHITE);
 
 JButton btnSalir =
         new JButton("Salir");
@@ -211,13 +241,13 @@ btnSalir.setForeground(
         Color.WHITE
 );
 
-JPanel panelSalir = new JPanel(
-        new BorderLayout()
+JPanel panelInferior = new JPanel(
+        new GridLayout(2, 1, 0, 6)
 );
 
-panelSalir.setOpaque(false);
+panelInferior.setOpaque(false);
 
-panelSalir.setBorder(
+panelInferior.setBorder(
         BorderFactory.createEmptyBorder(
                 10,
                 0,
@@ -226,13 +256,11 @@ panelSalir.setBorder(
         )
 );
 
-panelSalir.add(
-        btnSalir,
-        BorderLayout.CENTER
-);
+panelInferior.add(btnGuardar);
+panelInferior.add(btnSalir);
 
 menu.add(
-        panelSalir,
+        panelInferior,
         BorderLayout.SOUTH
 );
 
@@ -301,6 +329,14 @@ add(
                 )
         );
 
+        btnLogistica.addActionListener(e ->
+                mostrarPanel(
+                        new PanelLogistica(
+                                logisticaService
+                        )
+                )
+        );
+
         btnReportes.addActionListener(e ->
                 mostrarPanel(
                         new PanelReportes(
@@ -312,22 +348,72 @@ add(
                 )
         );
 
-        btnSalir.addActionListener(e -> {
-
-            int opcion =
-                    JOptionPane.showConfirmDialog(
-                            this,
-                            "¿Desea salir de SmartStore?",
-                            "Salir",
-                            JOptionPane.YES_NO_OPTION
-                    );
-
-            if (opcion ==
-                    JOptionPane.YES_OPTION) {
-
-                System.exit(0);
-            }
+        btnGuardar.addActionListener(e -> {
+            guardarDatosEnArchivos();
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Datos guardados exitosamente en los archivos .txt",
+                    "Persistencia Exitosa",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
         });
+
+        btnSalir.addActionListener(e -> confirmarYSalir());
+    }
+
+    // =========================================================
+    // PERSISTENCIA DE DATOS (SERIALIZACIÓN / DESERIALIZACIÓN)
+    // =========================================================
+
+    public void cargarDatosDesdeArchivos() {
+        try {
+            List<Cliente> clientesCargados = persistenciaService.cargarClientes();
+            clienteService.cargarClientes(clientesCargados);
+
+            List<Producto> productosCargados = persistenciaService.cargarProductos();
+            inventarioService.cargarProductos(productosCargados);
+
+            List<Pedido> pedidosCargados = persistenciaService.cargarPedidos();
+            pedidoService.cargarPedidos(pedidosCargados);
+
+            List<Factura> facturasCargadas = persistenciaService.cargarFacturas();
+            facturas.clear();
+            facturas.addAll(facturasCargadas);
+        } catch (Exception ex) {
+            System.err.println("Advertencia al cargar datos: " + ex.getMessage());
+        }
+    }
+
+    public void guardarDatosEnArchivos() {
+        try {
+            persistenciaService.guardarClientes(clienteService.listarClientes());
+            persistenciaService.guardarProductos(inventarioService.obtenerProductos());
+            persistenciaService.guardarPedidos(pedidoService.listarPedidos());
+            persistenciaService.guardarFacturas(facturas);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al guardar los datos: " + ex.getMessage(),
+                    "Error de persistencia",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
+    private void confirmarYSalir() {
+        int opcion = JOptionPane.showConfirmDialog(
+                this,
+                "¿Desea guardar los datos antes de salir?",
+                "Salir de SmartStore",
+                JOptionPane.YES_NO_CANCEL_OPTION
+        );
+
+        if (opcion == JOptionPane.YES_OPTION) {
+            guardarDatosEnArchivos();
+            System.exit(0);
+        } else if (opcion == JOptionPane.NO_OPTION) {
+            System.exit(0);
+        }
     }
 
     // =========================================================

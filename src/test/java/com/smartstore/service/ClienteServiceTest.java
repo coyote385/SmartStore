@@ -418,4 +418,28 @@ public class ClienteServiceTest {
                 service.cantidadClientes()
         );
     }
+
+    @Test
+    void testCargarClientesYLimpiar() {
+        Cliente c1 = new Cliente(1, "Ana", "Gomez", "111", "300", "ana@test.com", "Cali", true);
+        Cliente c2 = new Cliente(2, "Luis", "Perez", "222", "301", "luis@test.com", "Medellin", true);
+
+        service.cargarClientes(List.of(c1, c2));
+        assertEquals(2, service.cantidadClientes());
+
+        service.limpiar();
+        assertEquals(0, service.cantidadClientes());
+
+        service.cargarClientes(null);
+        assertEquals(0, service.cantidadClientes());
+    }
+
+    @Test
+    void testIntegracionHistorialCliente() {
+        Cliente c1 = new Cliente(1, "Ana", "Gomez", "111", "300", "ana@test.com", "Cali", true);
+        service.agregarCliente(c1);
+
+        assertNotNull(service.getHistorial());
+        assertTrue(service.obtenerUltimaOperacion().contains("Agregado"));
+    }
 }

@@ -4,8 +4,11 @@ import com.smartstore.structures.GrafoLogistico;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
@@ -146,6 +149,73 @@ public class RecorridosGrafo {
 
         return bfs(grafo, origen)
                 .contains(destino);
+    }
+
+    /**
+     * Calcula la ruta más corta (menor número de tramos) entre dos puntos
+     * utilizando el algoritmo BFS.
+     *
+     * @param grafo Grafo logístico.
+     * @param origen Punto de partida.
+     * @param destino Punto de llegada.
+     * @return Lista con los puntos de la ruta ordenada desde origen a destino, o lista vacía si no hay conexión.
+     */
+    public static List<String> rutaMasCorta(
+            GrafoLogistico grafo,
+            String origen,
+            String destino) {
+
+        validarGrafo(grafo);
+        validarInicio(origen);
+        validarInicio(destino);
+
+        List<String> ruta = new ArrayList<>();
+        if (!grafo.contienePunto(origen) || !grafo.contienePunto(destino)) {
+            return ruta;
+        }
+
+        if (origen.equalsIgnoreCase(destino)) {
+            ruta.add(origen);
+            return ruta;
+        }
+
+        Queue<String> cola = new ArrayDeque<>();
+        Map<String, String> predecesores = new HashMap<>();
+        Set<String> visitados = new HashSet<>();
+
+        cola.offer(origen);
+        visitados.add(origen);
+
+        boolean encontrado = false;
+        while (!cola.isEmpty()) {
+            String actual = cola.poll();
+
+            if (actual.equalsIgnoreCase(destino)) {
+                encontrado = true;
+                break;
+            }
+
+            for (String vecino : grafo.obtenerVecinos(actual)) {
+                if (!visitados.contains(vecino)) {
+                    visitados.add(vecino);
+                    predecesores.put(vecino, actual);
+                    cola.offer(vecino);
+                }
+            }
+        }
+
+        if (!encontrado) {
+            return ruta;
+        }
+
+        String paso = destino;
+        while (paso != null) {
+            ruta.add(paso);
+            paso = predecesores.get(paso);
+        }
+
+        Collections.reverse(ruta);
+        return ruta;
     }
 
     private static void validarGrafo(

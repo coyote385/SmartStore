@@ -4,17 +4,30 @@ import com.smartstore.model.Cliente;
 import com.smartstore.model.DetallePedido;
 import com.smartstore.model.Factura;
 import com.smartstore.model.Pedido;
+import com.smartstore.structures.ColaPedidos;
+import com.smartstore.structures.PilaHistorial;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Servicio encargado de gestionar los pedidos del sistema SmartStore.
+ * Integra Cola FIFO para atención de pedidos y Pila para auditoría de acciones.
+ *
+ * @author Jonathan Mendez
+ * @version 1.0
+ */
 public class PedidoService {
 
     private final List<Pedido> pedidos;
+    private final ColaPedidos colaPendientes;
+    private final PilaHistorial historial;
     private int consecutivoFactura;
 
     public PedidoService() {
         pedidos = new ArrayList<>();
+        colaPendientes = new ColaPedidos();
+        historial = new PilaHistorial();
         consecutivoFactura = 1;
     }
 
@@ -32,6 +45,8 @@ public class PedidoService {
         }
 
         pedidos.add(pedido);
+        colaPendientes.enqueue(pedido);
+        historial.push("Creado pedido #" + pedido.getId() + " para cliente " + pedido.getCliente().getNombre());
     }
 
     /**
@@ -58,6 +73,7 @@ public class PedidoService {
         Pedido pedido = buscarPedido(id);
 
         if (pedido != null) {
+            historial.push("Eliminado pedido #" + id);
             return pedidos.remove(pedido);
         }
 
@@ -111,12 +127,21 @@ public class PedidoService {
      * Genera la factura del pedido.
      */
     public Factura generarFactura(Pedido pedido) {
+        return generarFactura(pedido, 0.19);
+    }
+
+    /**
+     * Genera la factura del pedido con un porcentaje de IVA personalizado.
+     */
+    public Factura generarFactura(Pedido pedido, double iva) {
 
         if (pedido == null) {
             throw new IllegalArgumentException("El pedido no puede ser nulo.");
         }
 
-        return new Factura(consecutivoFactura++, pedido, 0.19);
+        Factura factura = new Factura(consecutivoFactura++, pedido, iva);
+        historial.push("Generada factura #" + factura.getNumero() + " para pedido #" + pedido.getId());
+        return factura;
     }
 
     /**
@@ -156,4 +181,70 @@ public class PedidoService {
         return pedidos.size();
     }
 
+    /**
+     * Carga una lista de pedidos en el servicio.
+     *
+     * @param nuevosPedidos Lista de pedidos a cargar.
+     */
+    public void cargarPedidos(List<Pedido> nuevosPedidos) {
+        limpiar();
+        if (nuevosPedidos != null) {
+            for (Pedido p : nuevosPedidos) {
+                if (p != null && buscarPedido(p.getId()) == null) {
+                    pedidos.add(p);
+                    if ("Pendiente".equalsIgnoreCase(p.getEstado())) {
+                        colaPendientes.enqueue(p);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Limpia todos los pedidos del servicio y reinicia la cola y el historial.
+     */
+    public void limpiar() {
+        pedidos.clear();
+        colaPendientes.clear();
+        historial.clear();
+    }
+
+    /**
+     * Despacha el siguiente pedido en la cola FIFO.
+     *
+     * @return El pedido despachado o null si no hay pedidos pendientes.
+     */
+    public Pedido despacharSiguientePedido() {
+        if (colaPendientes.isEmpty()) {
+            return null;
+        }
+        Pedido siguiente = colaPendientes.dequeue();
+        siguiente.setEstado("Despachado");
+        historial.push("Despachado pedido #" + siguiente.getId());
+        return siguiente;
+    }
+
+    public Pedido consultarProximoPedido() {
+        return colaPendientes.peek();
+    }
+
+    public int cantidadPedidosPendientes() {
+        return colaPendientes.size();
+    }
+
+    public boolean tienePedidosPendientes() {
+        return !colaPendientes.isEmpty();
+    }
+
+    public ColaPedidos getColaPendientes() {
+        return colaPendientes;
+    }
+
+    public PilaHistorial getHistorial() {
+        return historial;
+    }
+
+    public String obtenerUltimaOperacion() {
+        return historial.peek();
+    }
 }

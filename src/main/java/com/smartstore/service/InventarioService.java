@@ -2,13 +2,19 @@ package com.smartstore.service;
 
 import com.smartstore.exceptions.CodigoDuplicadoException;
 import com.smartstore.exceptions.ProductoNoEncontradoException;
+import com.smartstore.model.Categoria;
 import com.smartstore.model.Producto;
+import com.smartstore.structures.ArbolCategorias;
+import com.smartstore.structures.PilaHistorial;
+import com.smartstore.structures.TablaHashProductos;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Servicio encargado de gestionar el inventario de productos.
+ * Integra estructuras de datos optimizadas como Tabla Hash para búsquedas O(1),
+ * Árbol BST para categorías y Pila para historial de operaciones.
  *
  * @author Jonathan Mendez
  * @version 1.0
@@ -16,12 +22,18 @@ import java.util.List;
 public class InventarioService {
 
     private final List<Producto> productos;
+    private final TablaHashProductos tablaHash;
+    private final ArbolCategorias arbolCategorias;
+    private final PilaHistorial historial;
 
     /**
      * Constructor del servicio.
      */
     public InventarioService() {
         productos = new ArrayList<>();
+        tablaHash = new TablaHashProductos();
+        arbolCategorias = new ArbolCategorias();
+        historial = new PilaHistorial();
     }
 
     /**
@@ -47,10 +59,17 @@ public class InventarioService {
         }
 
         productos.add(producto);
+        tablaHash.agregar(producto);
+
+        if (producto.getCategoria() != null && arbolCategorias.buscar(producto.getCategoria().getId()) == null) {
+            arbolCategorias.insertar(producto.getCategoria());
+        }
+
+        historial.push("Registrado producto: " + producto.getCodigo() + " - " + producto.getNombre());
     }
 
     /**
-     * Busca un producto por su código.
+     * Busca un producto por su código utilizando la Tabla Hash en O(1).
      *
      * @param codigo Código del producto.
      * @return Producto encontrado o null si no existe.
@@ -61,16 +80,7 @@ public class InventarioService {
             return null;
         }
 
-        for (Producto producto : productos) {
-
-            if (producto.getCodigo()
-                    .equalsIgnoreCase(codigo)) {
-
-                return producto;
-            }
-        }
-
-        return null;
+        return tablaHash.buscar(codigo);
     }
 
     /**
@@ -123,6 +133,8 @@ public class InventarioService {
             );
         }
 
+        tablaHash.eliminar(codigo);
+        historial.push("Eliminado producto: " + codigo);
         return productos.remove(producto);
     }
 
@@ -144,5 +156,54 @@ public class InventarioService {
     public int cantidadProductos() {
 
         return productos.size();
+    }
+
+    /**
+     * Carga una lista de productos en el inventario sincronizando las estructuras.
+     *
+     * @param nuevosProductos Lista de productos a cargar.
+     */
+    public void cargarProductos(List<Producto> nuevosProductos) {
+        limpiar();
+        if (nuevosProductos != null) {
+            for (Producto p : nuevosProductos) {
+                if (p != null && buscarPorCodigo(p.getCodigo()) == null) {
+                    productos.add(p);
+                    tablaHash.agregar(p);
+                    if (p.getCategoria() != null && arbolCategorias.buscar(p.getCategoria().getId()) == null) {
+                        arbolCategorias.insertar(p.getCategoria());
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Limpia todos los productos y reinicia las estructuras.
+     */
+    public void limpiar() {
+        productos.clear();
+        tablaHash.clear();
+        historial.clear();
+    }
+
+    public TablaHashProductos getTablaHash() {
+        return tablaHash;
+    }
+
+    public ArbolCategorias getArbolCategorias() {
+        return arbolCategorias;
+    }
+
+    public PilaHistorial getHistorial() {
+        return historial;
+    }
+
+    public List<Categoria> obtenerCategoriasOrdenadas() {
+        return arbolCategorias.inOrden();
+    }
+
+    public String obtenerUltimaOperacion() {
+        return historial.peek();
     }
 }

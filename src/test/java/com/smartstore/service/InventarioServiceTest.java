@@ -329,4 +329,32 @@ public class InventarioServiceTest {
                 inventario.cantidadProductos()
         );
     }
+
+    @Test
+    void testCargarProductosYLimpiar() {
+        inventario.cargarProductos(List.of(crearProducto("P001"), crearProducto("P002")));
+        assertEquals(2, inventario.cantidadProductos());
+
+        inventario.limpiar();
+        assertEquals(0, inventario.cantidadProductos());
+
+        inventario.cargarProductos(null);
+        assertEquals(0, inventario.cantidadProductos());
+    }
+
+    @Test
+    void testIntegracionEstructurasInventario() throws CodigoDuplicadoException {
+        Producto p1 = crearProducto("P001");
+        inventario.registrarProducto(p1);
+
+        assertNotNull(inventario.getTablaHash());
+        assertEquals(1, inventario.getTablaHash().size());
+        assertEquals(p1, inventario.getTablaHash().buscar("P001"));
+
+        assertNotNull(inventario.getArbolCategorias());
+        assertEquals(1, inventario.obtenerCategoriasOrdenadas().size());
+
+        assertNotNull(inventario.getHistorial());
+        assertTrue(inventario.obtenerUltimaOperacion().contains("Registrado"));
+    }
 }

@@ -1,5 +1,6 @@
 package com.smartstore.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -10,7 +11,9 @@ import java.util.Objects;
  * @author Jonathan Mendez
  * @version 1.0
  */
-public class Producto {
+public class Producto implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private String codigo;
     private String nombre;

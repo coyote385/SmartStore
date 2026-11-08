@@ -187,4 +187,34 @@ public class RecorridosGrafoTest {
                 )
         );
     }
+
+    @Test
+    void testRutaMasCortaValida() {
+        List<String> ruta = RecorridosGrafo.rutaMasCorta(grafo, "Bodega", "ClienteA");
+        assertNotNull(ruta);
+        assertFalse(ruta.isEmpty());
+        assertEquals("Bodega", ruta.get(0));
+        assertEquals("ClienteA", ruta.get(ruta.size() - 1));
+    }
+
+    @Test
+    void testRutaMasCortaOrigenIgualDestino() {
+        List<String> ruta = RecorridosGrafo.rutaMasCorta(grafo, "Bodega", "Bodega");
+        assertEquals(List.of("Bodega"), ruta);
+    }
+
+    @Test
+    void testRutaMasCortaInexistente() {
+        grafo.agregarPunto("Aislado");
+        List<String> ruta = RecorridosGrafo.rutaMasCorta(grafo, "Bodega", "Aislado");
+        assertTrue(ruta.isEmpty());
+    }
+
+    @Test
+    void testRutaMasCortaValidaciones() {
+        assertThrows(IllegalArgumentException.class, () -> RecorridosGrafo.rutaMasCorta(null, "A", "B"));
+        assertThrows(IllegalArgumentException.class, () -> RecorridosGrafo.rutaMasCorta(grafo, null, "B"));
+        assertThrows(IllegalArgumentException.class, () -> RecorridosGrafo.rutaMasCorta(grafo, "A", null));
+        assertTrue(RecorridosGrafo.rutaMasCorta(grafo, "NoExiste1", "NoExiste2").isEmpty());
+    }
 }
